@@ -1,23 +1,35 @@
-version: '3'
-
 services:
+  web:
+    build: .
+    container_name: symfony-app-web
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - COMPOSER_VERSION=2
+      - WEB_DOCUMENT_INDEX=public/index.php
+    depends_on:
+      - database
+    ports:
+      - "80:80"
+
 ###> doctrine/doctrine-bundle ###
   database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    image: mysql:${MYSQL_VERSION:-8.0.32}
+    container_name: symfony-app-database
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
+      MYSQL_ROOT_PASSWORD: verySecret
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
       # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!ChangeMe!}
+      MYSQL_USER: ${MYSQL_USER:-app}
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
+      test: ["CMD", "mysqladmin", "ping", "-p${MYSQL_PASSWORD}"]
       timeout: 5s
       retries: 5
       start_period: 60s
     volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
+      - database_data:/var/lib/mysql
 ###< doctrine/doctrine-bundle ###
 
 volumes:
