@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Vich\UploaderBundle\Handler\DownloadHandler;
 
 #[Route('/product')]
 class ProductController extends AbstractController
@@ -77,5 +78,11 @@ class ProductController extends AbstractController
         }
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/download-image/{id}', name: 'app_product_image', methods: ['GET'])]
+    public function downloadImageAction(Product $product, DownloadHandler $downloadHandler): Response
+    {
+        return $downloadHandler->downloadObject($product, $fileField = 'imageFile');
     }
 }
