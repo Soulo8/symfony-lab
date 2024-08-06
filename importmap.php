@@ -16,6 +16,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'product_form' => [
+        'path' => './assets/product/form.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -24,5 +28,15 @@ return [
     ],
     '@hotwired/turbo' => [
         'version' => '7.3.0',
+    ],
+    'dropzone' => [
+        'version' => '6.0.0-beta.2',
+    ],
+    'dropzone/dist/dropzone.css' => [
+        'version' => '6.0.0-beta.2',
+        'type' => 'css',
+    ],
+    'just-extend' => [
+        'version' => '5.1.1',
     ],
 ];
