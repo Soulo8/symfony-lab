@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\ProductImage;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,6 +32,14 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $images = $request->files->get('product')['images'];
+            foreach ($images as $image) {
+                $productImage = new ProductImage();
+                $productImage->setImageFile($image);
+                $product->addImage($productImage);
+            }
+            
             $entityManager->persist($product);
             $entityManager->flush();
 

@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\Entity(repositoryClass: ProductImageRepository::class)]
 #[Vich\Uploadable]
-class Product
+class ProductImage
 {
     use TimestampableEntity;
 
@@ -20,9 +18,6 @@ class Product
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
     private ?File $imageFile = null;
@@ -33,32 +28,12 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
-    /**
-     * @var Collection<int, ProductImage>
-     */
-    #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
-    private Collection $images;
-
-    public function __construct()
-    {
-        $this->images = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    private ?Product $product = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function setImageFile(?File $imageFile = null): void
@@ -95,32 +70,14 @@ class Product
         return $this->imageSize;
     }
 
-    /**
-     * @return Collection<int, ProductImage>
-     */
-    public function getImages(): Collection
+    public function getProduct(): ?Product
     {
-        return $this->images;
+        return $this->product;
     }
 
-    public function addImage(ProductImage $image): static
+    public function setProduct(?Product $product): static
     {
-        if (!$this->images->contains($image)) {
-            $this->images->add($image);
-            $image->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImage(ProductImage $image): static
-    {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getProduct() === $this) {
-                $image->setProduct(null);
-            }
-        }
+        $this->product = $product;
 
         return $this;
     }
