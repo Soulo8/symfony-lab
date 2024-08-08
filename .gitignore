@@ -32,3 +32,5 @@
 ###> macOS ###
 .DS_Store
 ###< macOS ###
+
+node_modules/
