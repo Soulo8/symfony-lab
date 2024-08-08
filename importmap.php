@@ -16,10 +16,6 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
-    'product_form' => [
-        'path' => './assets/product/form.js',
-        'entrypoint' => true,
-    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
