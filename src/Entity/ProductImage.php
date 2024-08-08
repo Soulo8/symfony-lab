@@ -6,6 +6,7 @@ use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductImageRepository::class)]
@@ -20,6 +21,7 @@ class ProductImage
     private ?int $id = null;
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Assert\Image]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]

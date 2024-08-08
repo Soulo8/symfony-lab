@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,10 +27,17 @@ class ProductType extends AbstractType
             ->add('imageFile', VichImageType::class, [
                 'image_uri' => false,
                 'download_uri' => null === $product->getId() ? false : $this->router->generate('app_product_image', ['id' => $product->getId()]),
+                'required' => null === $product->getId() ? true : false,
             ])
-            ->add('images', FileType::class, [
+            ->add('newImages', FileType::class, [
                 'multiple' => true,
                 'mapped' => false,
+                'required' => null === $product->getId() ? true : false,
+            ])
+            ->add('images', CollectionType::class, [
+                'entry_type' => ProductImageType::class,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
         ;
     }

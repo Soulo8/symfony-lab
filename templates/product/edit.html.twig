@@ -2,10 +2,30 @@
 
 {% block title %}Edit Product{% endblock %}
 
+{% form_theme form _self %}
+
+{% block _product_images_entry_row %}
+    {% set image = form.vars.value %}
+
+    {{ form_row(form.id) }}
+    <img src="{{ vich_uploader_asset(image) }}" alt="{{ image.imageName }}" width="150">
+{% endblock %}
+
 {% block body %}
     <h1>Edit Product</h1>
 
-    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.imageFile) }}
+        {{ form_row(form.newImages) }}
+        {{ form_row(form.images) }}
+
+        {#<div id="my-dropzone" class="dropzone"></div>#}
+
+        {{ form_widget(form._token) }}
+
+        <button class="btn">Update</button>
+    {{ form_end(form, {'render_rest': false}) }}
 
     <a href="{{ path('app_product_index') }}">back to list</a>
 

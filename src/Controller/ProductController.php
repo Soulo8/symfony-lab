@@ -6,11 +6,13 @@ use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Vich\UploaderBundle\Handler\DownloadHandler;
 
 #[Route('/product')]
@@ -25,21 +27,31 @@ class ProductController extends AbstractController
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            $images = $request->files->get('product')['images'];
+            $images = $request->files->get('product')['newImages'];
             foreach ($images as $image) {
                 $productImage = new ProductImage();
                 $productImage->setImageFile($image);
                 $product->addImage($productImage);
+
+                $errors = $validator->validate($productImage);
+
+                if (count($errors) > 0) {
+                    $this->addFlash('error', "L'un des fichiers n'est pas une image.");
+
+                    return $this->render('product/new.html.twig', [
+                        'product' => $product,
+                        'form' => $form,
+                    ]);
+                }
             }
-            
+
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -61,12 +73,42 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        $originalImages = new ArrayCollection();
+        foreach ($product->getImages() as $image) {
+            $originalImages->add($image);
+        }
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
+        foreach ($originalImages as $image) {
+            if (false === $product->getImages()->contains($image)) {
+                $entityManager->remove($image);
+            }
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $images = $request->files->get('product')['newImages'];
+            foreach ($images as $image) {
+                $productImage = new ProductImage();
+                $productImage->setImageFile($image);
+
+                $errors = $validator->validate($productImage);
+
+                if (count($errors) > 0) {
+                    $this->addFlash('error', "L'un des fichiers n'est pas une image.");
+
+                    return $this->render('product/edit.html.twig', [
+                        'product' => $product,
+                        'form' => $form,
+                    ]);
+                }
+
+                $product->addImage($productImage);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
