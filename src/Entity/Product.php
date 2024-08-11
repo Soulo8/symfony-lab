@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -38,12 +39,21 @@ class Product
     /**
      * @var Collection<int, ProductImage>
      */
+    #[ORM\OrderBy(['position' => 'ASC'])]
     #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
     private Collection $images;
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
+    }
+
+    public function sortImagesByPosition(): void
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['position' => Criteria::ASC]);
+
+        $this->images = $this->images->matching($criteria);
     }
 
     public function getId(): ?int

@@ -80,38 +80,51 @@ class ProductController extends AbstractController
             $originalImages->add($image);
         }
 
+        if ($request->request->has('product')) {
+            $positions = array_flip(array_keys($request->request->all()['product']['images']));
+            $images = $product->getImages();
+            foreach ($images as $key => $image) {
+                if (array_key_exists($key, $positions)) {
+                    $image->setPosition($positions[$key]);
+                }
+            }
+            $product->sortImagesByPosition();
+        }
+
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        foreach ($originalImages as $image) {
-            if (false === $product->getImages()->contains($image)) {
-                $entityManager->remove($image);
+        if ($form->isSubmitted()) {
+            foreach ($originalImages as $image) {
+                if (false === $product->getImages()->contains($image)) {
+                    $entityManager->remove($image);
+                }
             }
-        }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $images = $request->files->get('product')['newImages'];
-            foreach ($images as $image) {
-                $productImage = new ProductImage();
-                $productImage->setImageFile($image);
+            if ($form->isValid()) {
+                $images = $request->files->get('product')['newImages'];
+                foreach ($images as $image) {
+                    $productImage = new ProductImage();
+                    $productImage->setImageFile($image);
 
-                $errors = $validator->validate($productImage);
+                    $errors = $validator->validate($productImage);
 
-                if (count($errors) > 0) {
-                    $this->addFlash('error', "L'un des fichiers n'est pas une image.");
+                    if (count($errors) > 0) {
+                        $this->addFlash('error', "L'un des fichiers n'est pas une image.");
 
-                    return $this->render('product/edit.html.twig', [
-                        'product' => $product,
-                        'form' => $form,
-                    ]);
+                        return $this->render('product/edit.html.twig', [
+                            'product' => $product,
+                            'form' => $form,
+                        ], new Response(null, 422));
+                    }
+
+                    $product->addImage($productImage);
                 }
 
-                $product->addImage($productImage);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
             }
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('product/edit.html.twig', [

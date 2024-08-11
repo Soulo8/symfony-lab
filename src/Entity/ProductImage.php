@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\ProductImageRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -32,6 +34,10 @@ class ProductImage
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Product $product = null;
+
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $position = null;
 
     public function getId(): ?int
     {
@@ -80,6 +86,18 @@ class ProductImage
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }

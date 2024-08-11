@@ -2,17 +2,26 @@
 
 {% block title %}Edit Product{% endblock %}
 
+
 {% form_theme form _self %}
 
 {% block _product_images_entry_row %}
     {% set image = form.vars.value %}
 
-    {{ form_row(form.id) }}
-    <img src="{{ vich_uploader_asset(image) }}" alt="{{ image.imageName }}" width="150">
+    <div>
+        {{ form_row(form.id) }}
+        <img src="{{ vich_uploader_asset(image) }}" alt="{{ image.imageName }}" width="150">
+    </div>
 {% endblock %}
+
 
 {% block body %}
     <h1>Edit Product</h1>
+
+    {#
+    <div data-controller="hello"></div>
+    <div {{ react_component('Hello', { fullName: 'Fabien' }) }}></div>
+    #}
 
     {{ form_start(form) }}
         {{ form_row(form.name) }}
