@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    container_name: symfony-app-web
+    container_name: bac-a-sable-symfony-7-web
     working_dir: /app
     volumes:
       - ./:/app
@@ -16,7 +16,7 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     image: mysql:${MYSQL_VERSION:-8.0.32}
-    container_name: symfony-app-database
+    container_name: bac-a-sable-symfony-7-database
     environment:
       MYSQL_ROOT_PASSWORD: verySecret
       MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
