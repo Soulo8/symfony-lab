@@ -37,4 +37,7 @@ return [
     '@symfony/ux-react' => [
         'path' => './vendor/symfony/ux-react/assets/dist/loader.js',
     ],
+    'sortablejs' => [
+        'version' => '1.15.3',
+    ],
 ];
