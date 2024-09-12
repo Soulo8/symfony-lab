@@ -14,12 +14,14 @@
     </div>
 {% endblock %}
 
-{% block importmap %}
-    {{ importmap(['app', 'product_edit']) }}
-{% endblock %}
 
 {% block body %}
     <h1>Edit Product</h1>
+
+    {#
+    <div data-controller="hello"></div>
+    <div {{ react_component('Hello', { fullName: 'Fabien' }) }}></div>
+    #}
 
     {{ form_start(form) }}
         {{ form_row(form.name) }}
@@ -27,8 +29,12 @@
         {{ form_row(form.newImages) }}
         {{ form_row(form.images) }}
 
+        {#<div id="my-dropzone" class="dropzone"></div>#}
+
+        {{ form_widget(form._token) }}
+
         <button class="btn">Update</button>
-    {{ form_end(form)}}
+    {{ form_end(form, {'render_rest': false}) }}
 
     <a href="{{ path('app_product_index') }}">back to list</a>
 
