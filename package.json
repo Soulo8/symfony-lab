@@ -2,7 +2,8 @@
     "devDependencies": {
         "@babel/cli": "^7.24.8",
         "@babel/core": "^7.25.2",
-        "@babel/preset-react": "^7.24.7"
+        "@babel/preset-react": "^7.24.7",
+        "@types/sortablejs": "^1.15.8"
     },
     "scripts": {
         "build": "npm run build-react",
