@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\ProductImageService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -73,8 +74,13 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
-    {
+    public function edit(
+        Request $request,
+        Product $product,
+        EntityManagerInterface $entityManager,
+        ValidatorInterface $validator,
+        ProductImageService $productImageService
+    ): Response {
         $originalImages = new ArrayCollection();
         foreach ($product->getImages() as $image) {
             $originalImages->add($image);
@@ -115,6 +121,7 @@ class ProductController extends AbstractController
                         return $this->render('product/edit.html.twig', [
                             'product' => $product,
                             'form' => $form,
+                            'images' => $productImageService->getImagesData($product),
                         ], new Response(null, 422));
                     }
 
@@ -130,6 +137,7 @@ class ProductController extends AbstractController
         return $this->render('product/edit.html.twig', [
             'product' => $product,
             'form' => $form,
+            'images' => $productImageService->getImagesData($product),
         ]);
     }
 
