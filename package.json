@@ -8,6 +8,6 @@
     },
     "scripts": {
         "build": "npm run build-react",
-        "build-react": "babel assets/react --out-dir assets/build/react --presets=@babel/preset-react"
+        "build-react": "babel assets/react --out-dir assets/build/react --extensions \".js,.jsx,.ts,.tsx\" --presets=@babel/preset-react,@babel/preset-typescript"
     }
 }
