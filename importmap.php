@@ -37,4 +37,16 @@ return [
     '@symfony/ux-react' => [
         'path' => './vendor/symfony/ux-react/assets/dist/loader.js',
     ],
+    'react-sortablejs' => [
+        'version' => '6.1.4',
+    ],
+    'sortablejs' => [
+        'version' => '1.15.3',
+    ],
+    'classnames' => [
+        'version' => '2.3.1',
+    ],
+    'tiny-invariant' => [
+        'version' => '1.2.0',
+    ],
 ];
