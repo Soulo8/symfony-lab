@@ -40,6 +40,10 @@ class ProductType extends AbstractType
                 'by_reference' => false,
             ])
         ;
+
+        if (null !== $product->getId()) {
+            $builder->setMethod('PUT');
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
