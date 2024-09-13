@@ -28,6 +28,7 @@ class Product
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
     #[Assert\Image]
+    #[Assert\NotNull(groups: ['create'])]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]

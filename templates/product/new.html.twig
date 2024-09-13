@@ -6,11 +6,12 @@
     <h1>Create new Product</h1>
 
     {{ form_start(form) }}
+        {{ form_errors(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.imageFile) }}
         {{ form_row(form.newImages) }}
 
-        <button class="btn">Save</button>
+        <button class="btn" name="save">Save</button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_product_index') }}">back to list</a>

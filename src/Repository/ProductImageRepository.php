@@ -3,12 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\ProductImage;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
 /**
- * @extends ServiceEntityRepository<ProductImage>
+ * @extends SortableRepository
  */
 class ProductImageRepository extends SortableRepository
 {

@@ -19,7 +19,7 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
 #[Route('/product')]
 class ProductController extends AbstractController
 {
-    #[Route('/', name: 'app_product_index', methods: ['GET'])]
+    #[Route('', name: 'app_product_index', methods: ['GET'])]
     public function index(ProductRepository $productRepository): Response
     {
         return $this->render('product/index.html.twig', [
@@ -31,7 +31,8 @@ class ProductController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
+
+        $form = $this->createForm(ProductType::class, $product, ['validation_groups' => ['create']]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -39,7 +40,6 @@ class ProductController extends AbstractController
             foreach ($images as $image) {
                 $productImage = new ProductImage();
                 $productImage->setImageFile($image);
-                $product->addImage($productImage);
 
                 $errors = $validator->validate($productImage);
 
@@ -49,8 +49,19 @@ class ProductController extends AbstractController
                     return $this->render('product/new.html.twig', [
                         'product' => $product,
                         'form' => $form,
-                    ]);
+                    ], new Response(null, 422));
                 }
+
+                $product->addImage($productImage);
+            }
+
+            if (0 === $product->getImages()->count()) {
+                $this->addFlash('error', "Vous n'avez pas ajouté d'image.");
+
+                return $this->render('product/new.html.twig', [
+                    'product' => $product,
+                    'form' => $form,
+                ], new Response(null, 422));
             }
 
             $entityManager->persist($product);
@@ -117,6 +128,16 @@ class ProductController extends AbstractController
                     }
 
                     $product->addImage($productImage);
+                }
+
+                if (0 === $product->getImages()->count()) {
+                    $this->addFlash('error', "Vous n'avez pas ajouté d'image.");
+
+                    return $this->render('product/edit.html.twig', [
+                        'product' => $product,
+                        'form' => $form,
+                        'images' => $productImageService->getImagesData($product),
+                    ], new Response(null, 422));
                 }
 
                 $entityManager->flush();
