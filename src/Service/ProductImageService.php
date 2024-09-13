@@ -16,14 +16,16 @@ class ProductImageService
 
     public function getImagesData(Product $product): array
     {
-        $index = 0;
-
-        return $product->getImages()->map(function ($image) use (&$index) {
-            return [
-                'index' => $index++,
+        $data = [];
+        $images = $product->getImages();
+        foreach ($images as $key => $image) {
+            $data[] = [
+                'index' => $key,
                 'name' => $image->getImageName(),
                 'url' => $this->uploaderHelper->asset($image, 'imageFile'),
             ];
-        })->toArray();
+        }
+
+        return $data;
     }
 }
