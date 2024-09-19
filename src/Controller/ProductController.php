@@ -90,7 +90,7 @@ class ProductController extends AbstractController
         Product $product,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator,
-        ProductImageService $productImageService
+        ProductImageService $productImageService,
     ): Response {
         $originalImages = new ArrayCollection();
         foreach ($product->getImages() as $image) {
