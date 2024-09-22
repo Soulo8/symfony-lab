@@ -57,11 +57,6 @@ jobs:
       - name: Install Importmap
         run: php bin/console importmap:install
 
-      - name: Create Database
-        env:
-          DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
-        run: php bin/console doctrine:database:create --env=test
-
       - name: Run Migration
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
