@@ -1,4 +1,6 @@
 {
+    "name": "soulo8/bac_a_sable_symfony_7",
+    "description": "Sandbox project on Symfony 7",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
