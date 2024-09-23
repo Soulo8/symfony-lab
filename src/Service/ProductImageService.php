@@ -8,13 +8,16 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class ProductImageService
 {
-    private $uploaderHelper;
+    private UploaderHelper $uploaderHelper;
 
     public function __construct(UploaderHelper $uploaderHelper)
     {
         $this->uploaderHelper = $uploaderHelper;
     }
 
+    /**
+     * @return array<array<int|string>>
+     */
     public function getImagesData(Product $product): array
     {
         $data = [];

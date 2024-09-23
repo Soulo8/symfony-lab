@@ -54,7 +54,7 @@ class Product
         $criteria = Criteria::create()
             ->orderBy(['position' => Criteria::ASC]);
 
-        $this->images = $this->images->matching($criteria);
+        $this->images = (new ArrayCollection($this->images->toArray()))->matching($criteria);
     }
 
     public function getId(): ?int
