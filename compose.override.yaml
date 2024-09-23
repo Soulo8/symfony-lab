@@ -8,7 +8,6 @@ services:
 ###> symfony/mailer ###
   mailer:
     image: axllent/mailpit
-    container_name: bac-a-sable-symfony-7-mailer
     ports:
       - "1025"
       - "8025"
