@@ -3,16 +3,14 @@
 namespace App\Repository;
 
 use App\Entity\ProductImage;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
-/**
- * @extends SortableRepository
- */
 class ProductImageRepository extends SortableRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(EntityManagerInterface $em)
     {
-        parent::__construct($registry, ProductImage::class);
+        $classMetadata = $em->getClassMetadata(ProductImage::class);
+        parent::__construct($em, $classMetadata);
     }
 }

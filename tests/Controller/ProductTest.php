@@ -39,9 +39,10 @@ class ProductTest extends WebTestCase
         $uploadedFile = new UploadedFile($filePath, 'paysage.jpg', 'image/jpeg', null);
 
         $form['product[name]'] = 'Mon produit';
-        $form['product[imageFile][file]'] = $uploadedFile;
-        $form['product[newImages][0]'] = $uploadedFile;
-        $client->submit($form);
+        $client->submit($form, [
+            'product[imageFile][file]' => $uploadedFile,
+            'product[newImages][0]' => $uploadedFile,
+        ]);
 
         $this->assertResponseRedirects('/product', 303);
     }
@@ -76,8 +77,9 @@ class ProductTest extends WebTestCase
         $form = $buttonCrawlerNode->form();
 
         $form['product[name]'] = 'Mon produit modifié';
-        $form['product[newImages][0]'] = $product->getImages()->first()->getImageFile();
-        $client->submit($form);
+        $client->submit($form, [
+            'product[newImages][0]' => $product->getImages()->first()->getImageFile(),
+        ]);
 
         $this->assertResponseRedirects('/product', 303);
     }
