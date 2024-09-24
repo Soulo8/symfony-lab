@@ -9,6 +9,13 @@ interface ItemType {
     url: string;
 }
 
+interface ImageProps {
+    index: number;
+    name: string;
+    url: string;
+    onRemove: (index: number) => void;
+}
+
 const BasicFunction: FC = (props) => {
     const [state, setState] = useState<ItemType[]>(props.images);
 
@@ -25,7 +32,7 @@ const BasicFunction: FC = (props) => {
     );
 };
 
-function Image({ index, name, url, onRemove }) {
+function Image({ index, name, url, onRemove }: ImageProps) {
     return <div>
         <input type="hidden" id={`product_images_${index}_id`} name={`product[images][${index}][id]`} />
         <img src={url} alt={name} width="150" />
