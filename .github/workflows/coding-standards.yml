@@ -1,4 +1,4 @@
-name: Fix Code Style
+name: Fix code styling
 
 on: [push]
 
@@ -25,7 +25,7 @@ jobs:
         run: php-cs-fixer fix --dry-run
 
   linters:
-    name: Linters
+    name: Linters PHP
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -77,3 +77,23 @@ jobs:
 
       - name: Run PHPStan
         run: ./vendor/bin/phpstan analyze
+
+  eslint:
+    name: Linters JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run lint for JS and TS
+        run: npm run lint
+
+      - name: Clean up
+        run: rm -rf node_modules

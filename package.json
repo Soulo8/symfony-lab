@@ -4,10 +4,19 @@
         "@babel/core": "^7.25.2",
         "@babel/preset-react": "^7.24.7",
         "@babel/preset-typescript": "^7.24.7",
-        "@types/sortablejs": "^1.15.8"
+        "@eslint/js": "^9.11.1",
+        "@types/sortablejs": "^1.15.8",
+        "eslint": "^9.11.1",
+        "eslint-plugin-react": "^7.36.1",
+        "globals": "^15.9.0",
+        "typescript": "<5.6.0",
+        "typescript-eslint": "^8.7.0"
     },
     "scripts": {
         "build": "npm run build-react",
-        "build-react": "babel assets/react --out-dir assets/build/react --extensions \".js,.jsx,.ts,.tsx\" --presets=@babel/preset-react,@babel/preset-typescript"
+        "build-react": "babel assets/react --out-dir assets/build/react --extensions \".js,.jsx,.ts,.tsx\" --presets=@babel/preset-react,@babel/preset-typescript",
+        "lint:js": "eslint 'assets/app.js' 'assets/bootstrap.js' 'assets/controllers/**/*.{js,mjs,cjs}'",
+        "lint:ts": "eslint 'assets/react/**/*.{js,jsx,ts,tsx}'",
+        "lint": "npm run lint:js && npm run lint:ts"
     }
 }
