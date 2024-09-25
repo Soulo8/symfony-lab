@@ -3,28 +3,7 @@ name: Fix code styling
 on: [push]
 
 jobs:
-  php-cs-fixer:
-    name: PHP-CS-Fixer
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        php: ['8.3']
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          tools: php-cs-fixer:3.64
-
-      - name: Run PHP-CS-Fixer
-        run: php-cs-fixer fix --dry-run
-
-  linters:
+  php-linters:
     name: Linters PHP
     runs-on: ubuntu-latest
     strategy:
@@ -41,7 +20,7 @@ jobs:
           coverage: "none"
           extensions: intl
           php-version: ${{ matrix.php-version }}
-          tools: composer:v2
+          tools: php-cs-fixer:3.64,composer:v2
   
       - name: Set composer cache directory
         id: composer-cache
@@ -75,6 +54,9 @@ jobs:
       - name: Lint Composer config
         run: composer validate --strict
 
+      - name: Run PHP-CS-Fixer
+        run: php-cs-fixer fix --dry-run
+
       - name: Run PHPStan
         run: ./vendor/bin/phpstan analyze
 
@@ -88,12 +70,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run lint for JS and TS
         run: npm run lint
-
-      - name: Clean up
-        run: rm -rf node_modules
