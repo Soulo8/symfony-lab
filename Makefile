@@ -1,20 +1,25 @@
-WEB_CONTAINER = web
-
 sh:
-	docker compose exec $(WEB_CONTAINER) zsh
+	docker compose exec web zsh
 
 php-cs-fixer:
-	docker compose exec $(WEB_CONTAINER) ./vendor/bin/php-cs-fixer fix
+	docker compose exec web ./vendor/bin/php-cs-fixer fix
 
 phpstan:
-	docker compose exec $(WEB_CONTAINER) ./vendor/bin/phpstan analyze
+	docker compose exec web ./vendor/bin/phpstan analyze
 
-linters: php-cs-fixer phpstan
-	docker compose exec $(WEB_CONTAINER) ./bin/console lint:yaml config --parse-tags
-	docker compose exec $(WEB_CONTAINER) ./bin/console lint:twig templates
-	docker compose exec $(WEB_CONTAINER) ./bin/console lint:xliff translations
-	docker compose exec $(WEB_CONTAINER) ./bin/console lint:container
-	docker compose exec $(WEB_CONTAINER) ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
-	docker compose exec $(WEB_CONTAINER) composer validate --strict
+php-linters: php-cs-fixer phpstan
+	docker compose exec web ./bin/console lint:yaml config --parse-tags
+	docker compose exec web ./bin/console lint:twig templates
+	docker compose exec web ./bin/console lint:xliff translations
+	docker compose exec web ./bin/console lint:container
+	docker compose exec web ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
+	docker compose exec web composer validate --strict
+
+eslint:
+	docker compose exec web npm run lint
+
+js-build:
+	docker compose exec web npm run build
+
 test:
-	docker compose exec $(WEB_CONTAINER) ./vendor/bin/phpunit
+	docker compose exec web ./vendor/bin/phpunit
