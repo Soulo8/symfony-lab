@@ -6,9 +6,6 @@ jobs:
   php-linters:
     name: Linters PHP
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ['8.3']
     
     steps:
       - name: Checkout code
@@ -19,7 +16,7 @@ jobs:
         with:
           coverage: "none"
           extensions: intl
-          php-version: ${{ matrix.php-version }}
+          php-version: '8.3'
           tools: php-cs-fixer:3.64,composer:v2
   
       - name: Set composer cache directory
@@ -70,7 +67,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci

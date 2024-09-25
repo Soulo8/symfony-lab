@@ -57,6 +57,7 @@ jobs:
       - name: Install Importmap
         run: php bin/console importmap:install
 
+      # In the DATABASE_URL variable the database is not called symfony_test, but symfony, because the Doctrine configuration adds the suffix _test
       - name: Run Migration
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
