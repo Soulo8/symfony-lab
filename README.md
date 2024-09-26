@@ -5,7 +5,7 @@
 # Se connecter avec le terminal aux conteneurs
 
 Vous pouvez le faire via Docker Desktop ou avec les commandes :
-- `docker compose exec web zsh`
+- `make sh` ou `docker compose exec web zsh`
 - `docker compose exec database sh`
 
 # Installer le projet
@@ -14,20 +14,7 @@ Vous pouvez le faire via Docker Desktop ou avec les commandes :
 - Dans le conteneur du projet faire les commandes :
     - `composer install`.
     - `php bin/console doctrine:migrations:migrate`
-
-## Créer la base de données de test
-
-- Dans le conteneur MySQL faire la commande `mysql -u root -pverySecret`.
-- Faire les commandes :
-
-```
-GRANT ALL PRIVILEGES ON *.* TO 'user'@'%';
-FLUSH PRIVILEGES;
-```
-
-- Dans le conteneur du projet faire les commandes :
-    - `php bin/console --env=test doctrine:database:create`
-    - `php bin/console --env=test doctrine:schema:create`.
+    - `php bin/console --env=test doctrine:schema:create`
 
 # Commandes
 
