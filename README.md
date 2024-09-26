@@ -2,23 +2,32 @@
 
 - Docker (Docker Desktop)
 
+# Se connecter avec le terminal aux conteneurs
+
+Vous pouvez le faire via Docker Desktop ou avec les commandes :
+- `docker compose exec web zsh`
+- `docker compose exec database sh`
+
 # Installer le projet
 
-À la racine du projet, faire la commande `docker compose up` pour créer les conteneurs du projet. Par la suite, vous pourrez démarrer les conteneurs via l'interface graphique de Docker Desktop.
+- À la racine du projet, faire la commande `docker compose up` pour créer les conteneurs du projet. Par la suite, vous pourrez démarrer les conteneurs via l'interface graphique de Docker Desktop.
+- Dans le conteneur du projet faire les commandes :
+    - `composer install`.
+    - `php bin/console doctrine:migrations:migrate`
 
 ## Créer la base de données de test
 
-- Avec le terminal se connecter au conteneur MySQL `docker compose exec database sh`.
-- Faire la commande `mysql -u root -pverySecret`.
+- Dans le conteneur MySQL faire la commande `mysql -u root -pverySecret`.
 - Faire les commandes :
 
 ```
-GRANT ALL PRIVILEGES ON *.* TO 'app'@'%';
+GRANT ALL PRIVILEGES ON *.* TO 'user'@'%';
 FLUSH PRIVILEGES;
 ```
 
-- Avec le terminal se connecter au conteneur du projet `docker compose exec web zsh`.
-- Faire les commandes `php bin/console --env=test doctrine:database:create` et `php bin/console --env=test doctrine:schema:create`.
+- Dans le conteneur du projet faire les commandes :
+    - `php bin/console --env=test doctrine:database:create`
+    - `php bin/console --env=test doctrine:schema:create`.
 
 # Commandes
 
