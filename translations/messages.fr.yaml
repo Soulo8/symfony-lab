@@ -2,7 +2,7 @@ actions: Actions
 back_to_list: Retour à la liste
 confirme:
   delete:
-    product: Êtes-vous sûr de vouloir supprimer ce produit ?
+    item: Êtes-vous sûr de vouloir supprimer cet élément ?
 create: Créer
 created_at: Créé le
 delete: Supprimer
