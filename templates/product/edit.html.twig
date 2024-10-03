@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Product{% endblock %}
+{% block title %}{{ 'product.edit'|trans }}{% endblock %}
 
 {#
 {% form_theme form _self %}
@@ -16,7 +16,7 @@
 #}
 
 {% block body %}
-    <h1>Edit Product</h1>
+    <h1>{{ 'product.edit'|trans }}</h1>
 
     {{ form_start(form) }}
         {{ form_row(form.name) }}
@@ -30,10 +30,10 @@
 
         {{ form_widget(form._token) }}
 
-        <button class="btn" name="save">Save</button>
+        <button class="btn" name="save">{{ 'save'|trans }}</button>
     {{ form_end(form, {'render_rest': false}) }}
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+    <a href="{{ path('app_product_index') }}">{{ 'back_to_list'|trans }}</a>
 
     {{ include('product/_delete_form.html.twig') }}
 {% endblock %}

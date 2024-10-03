@@ -1,0 +1,21 @@
+actions: Actions
+back_to_list: Retour à la liste
+confirme:
+  delete:
+    product: Êtes-vous sûr de vouloir supprimer ce produit ?
+create: Créer
+created_at: Créé le
+delete: Supprimer
+edit: Modifier
+id: Id
+image: Image
+images: Images
+name: Nom
+product:
+  new: Nouveau produit
+  edit: Édition du produit
+no_records_found: Aucun enregistrement trouvé
+products: Produits
+save: Enregistrer
+show: Afficher
+updated_at: Mis à jour le
