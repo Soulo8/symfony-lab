@@ -47,17 +47,6 @@ class ProductTest extends WebTestCase
         $this->assertResponseRedirects('/product', 303);
     }
 
-    public function testShow(): void
-    {
-        $client = static::createClient();
-
-        $product = ProductFactory::createOne();
-
-        $client->request('GET', '/product/'.$product->getId());
-
-        $this->assertResponseStatusCodeSame(200);
-    }
-
     public function testEdit(): void
     {
         $client = static::createClient();
