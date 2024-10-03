@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Product{% endblock %}
+{% block title %}{{ 'product.new'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Product</h1>
+    <h1>{{ 'product.new'|trans }}</h1>
 
     {{ form_start(form) }}
         {{ form_errors(form) }}
@@ -11,8 +11,8 @@
         {{ form_row(form.imageFile) }}
         {{ form_row(form.newImages) }}
 
-        <button class="btn" name="save">Save</button>
+        <button class="btn" name="save">{{ 'save'|trans }}</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+    <a href="{{ path('app_product_index') }}">{{ 'back_to_list'|trans }}</a>
 {% endblock %}
