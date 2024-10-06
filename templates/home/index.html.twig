@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'home'|trans }}{% endblock %}
+
+{% block content %}
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+        <li>
+            <a href="{{ path('app_product_index') }}" class="link">{{ 'product.list'|trans }}</a>
+        </li>
+    </ul>
+{% endblock %}

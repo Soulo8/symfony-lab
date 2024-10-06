@@ -15,7 +15,7 @@
 {% endblock %}
 #}
 
-{% block body %}
+{% block content %}
     <h1>{{ 'product.edit'|trans }}</h1>
 
     {{ form_start(form) }}
@@ -23,17 +23,12 @@
         {{ form_row(form.imageFile) }}
         {{ form_row(form.newImages) }}
 
-        <div>
-            {{ form_label(form.images) }}
-            <div {{ react_component('ProductImages', { images: images }) }}></div>
-        </div>
+        <div {{ react_component('ProductImages', { images: images }) }}></div>
 
         {{ form_widget(form._token) }}
 
         <button class="btn" name="save">{{ 'save'|trans }}</button>
     {{ form_end(form, {'render_rest': false}) }}
-
-    <a href="{{ path('app_product_index') }}">{{ 'back_to_list'|trans }}</a>
 
     {{ include('product/_delete_form.html.twig') }}
 {% endblock %}

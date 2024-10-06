@@ -18,5 +18,8 @@
         "lint:js": "eslint 'assets/app.js' 'assets/bootstrap.js' 'assets/controllers/**/*.{js,mjs,cjs}'",
         "lint:ts": "eslint 'assets/react/**/*.{js,jsx,ts,tsx}'",
         "lint": "npm run lint:js && npm run lint:ts"
+    },
+    "dependencies": {
+        "flowbite": "^2.5.2"
     }
 }
