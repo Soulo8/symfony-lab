@@ -16,6 +16,10 @@
     <body>
         {% include('flash_message.html.twig') %}
 
-        {% block body %}{% endblock %}
+        {% block body %}
+            <div class="container mx-auto px-4 pt-4">
+                {% block content %}{% endblock %}
+            </div>
+        {% endblock %}
     </body>
 </html>

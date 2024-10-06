@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'product.new'|trans }}{% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>{{ 'product.new'|trans }}</h1>
 
     {{ form_start(form) }}
@@ -14,5 +14,5 @@
         <button class="btn" name="save">{{ 'save'|trans }}</button>
     {{ form_end(form) }}
 
-    <a href="{{ path('app_product_index') }}">{{ 'back_to_list'|trans }}</a>
+    <a href="{{ path('app_product_index') }}" class="link">{{ 'back_to_list'|trans }}</a>
 {% endblock %}
