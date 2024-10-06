@@ -30,7 +30,5 @@
         <button class="btn" name="save">{{ 'save'|trans }}</button>
     {{ form_end(form, {'render_rest': false}) }}
 
-    <a href="{{ path('app_product_index') }}" class="link">{{ 'back_to_list'|trans }}</a>
-
     {{ include('product/_delete_form.html.twig') }}
 {% endblock %}

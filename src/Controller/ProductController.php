@@ -9,6 +9,7 @@ use App\Repository\ProductRepository;
 use App\Service\ProductImageService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use SlopeIt\BreadcrumbBundle\Attribute\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +18,16 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Vich\UploaderBundle\Handler\DownloadHandler;
 
 #[Route('/product')]
+#[Breadcrumb([
+    'label' => 'home',
+    'route' => 'app_home',
+])]
 class ProductController extends AbstractController
 {
     #[Route('', name: 'app_product_index', methods: ['GET'])]
+    #[Breadcrumb([
+        ['label' => 'product.list'],
+    ])]
     public function index(ProductRepository $productRepository): Response
     {
         return $this->render('product/index.html.twig', [
@@ -28,6 +36,10 @@ class ProductController extends AbstractController
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
+    #[Breadcrumb([
+        ['label' => 'product.list', 'route' => 'app_product_index'],
+        ['label' => 'product.new'],
+    ])]
     public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $product = new Product();
@@ -77,6 +89,10 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'PUT'])]
+    #[Breadcrumb([
+        ['label' => 'product.list', 'route' => 'app_product_index'],
+        ['label' => 'product.edit'],
+    ])]
     public function edit(
         Request $request,
         Product $product,

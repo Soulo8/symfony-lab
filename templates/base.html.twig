@@ -14,10 +14,11 @@
         {% endblock %}
     </head>
     <body>
-        {% include('flash_message.html.twig') %}
-
         {% block body %}
             <div class="container mx-auto px-4 pt-4">
+                {{ slope_it_breadcrumb() }}
+                {% include('flash_message.html.twig') %}
+
                 {% block content %}{% endblock %}
             </div>
         {% endblock %}
