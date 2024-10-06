@@ -57,6 +57,9 @@ jobs:
       - name: Install Importmap
         run: php bin/console importmap:install
 
+      - name: Install dependencies JavaScript
+        run: npm ci
+
       - name: Tailwind CSS compilation
         run: php bin/console tailwind:build
 
