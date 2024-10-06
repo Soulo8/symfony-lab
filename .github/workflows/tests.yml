@@ -57,6 +57,9 @@ jobs:
       - name: Install Importmap
         run: php bin/console importmap:install
 
+      - name: Tailwind CSS compilation
+        run: php bin/console tailwind:build
+
       # In the DATABASE_URL variable the database is not called symfony_test, but symfony, because the Doctrine configuration adds the suffix _test
       - name: Run Migration
         env:
