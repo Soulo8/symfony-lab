@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Handler\DownloadHandler;
 
 #[Route('/product')]
@@ -40,8 +41,12 @@ class ProductController extends AbstractController
         ['label' => 'product.list', 'route' => 'app_product_index'],
         ['label' => 'product.new'],
     ])]
-    public function new(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
+        ValidatorInterface $validator,
+    ): Response {
         $product = new Product();
 
         $form = $this->createForm(ProductType::class, $product, ['validation_groups' => ['create']]);
@@ -56,7 +61,7 @@ class ProductController extends AbstractController
                 $errors = $validator->validate($productImage);
 
                 if (count($errors) > 0) {
-                    $this->addFlash('error', "L'un des fichiers n'est pas une image.");
+                    $this->addFlash('error', $translator->trans('one_of_the_files_is_not_an_image'));
 
                     return $this->render('product/new.html.twig', [
                         'product' => $product,
@@ -68,7 +73,7 @@ class ProductController extends AbstractController
             }
 
             if (0 === $product->getImages()->count()) {
-                $this->addFlash('error', "Vous n'avez pas ajouté d'image.");
+                $this->addFlash('error', $translator->trans('you_have_not_added_an_image'));
 
                 return $this->render('product/new.html.twig', [
                     'product' => $product,
@@ -78,6 +83,8 @@ class ProductController extends AbstractController
 
             $entityManager->persist($product);
             $entityManager->flush();
+
+            $this->addFlash('success', $translator->trans('record.added'));
 
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -97,6 +104,7 @@ class ProductController extends AbstractController
         Request $request,
         Product $product,
         EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
         ValidatorInterface $validator,
         ProductImageService $productImageService,
     ): Response {
@@ -126,7 +134,7 @@ class ProductController extends AbstractController
                     $errors = $validator->validate($productImage);
 
                     if (count($errors) > 0) {
-                        $this->addFlash('error', "L'un des fichiers n'est pas une image.");
+                        $this->addFlash('error', $translator->trans('one_of_the_files_is_not_an_image'));
 
                         return $this->render('product/edit.html.twig', [
                             'product' => $product,
@@ -139,7 +147,7 @@ class ProductController extends AbstractController
                 }
 
                 if (0 === $product->getImages()->count()) {
-                    $this->addFlash('error', "Vous n'avez pas ajouté d'image.");
+                    $this->addFlash('error', $translator->trans('you_have_not_added_an_image'));
 
                     return $this->render('product/edit.html.twig', [
                         'product' => $product,
@@ -149,6 +157,8 @@ class ProductController extends AbstractController
                 }
 
                 $entityManager->flush();
+
+                $this->addFlash('success', $translator->trans('record.modified'));
 
                 return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -162,11 +172,17 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_product_delete', methods: ['DELETE'])]
-    public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
-    {
+    public function delete(
+        Request $request,
+        Product $product,
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
+    ): Response {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($product);
             $entityManager->flush();
+
+            $this->addFlash('success', $translator->trans('record.deleted'));
         }
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
