@@ -76,6 +76,9 @@
             "tests/bootstrap.php"
         ]
     },
+    "slope-it/breadcrumb-bundle": {
+        "version": "2.1.1"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.12",
         "recipe": {
