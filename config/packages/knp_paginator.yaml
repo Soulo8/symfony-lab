@@ -1,0 +1,4 @@
+knp_paginator:
+    template:
+        pagination: 'pagination/sliding.html.twig'
+        sortable: 'pagination/sortable_link.html.twig'

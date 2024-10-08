@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
-use App\Repository\ProductRepository;
 use App\Service\ProductImageService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use SlopeIt\BreadcrumbBundle\Attribute\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,14 +25,30 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
 ])]
 class ProductController extends AbstractController
 {
+    private const int LIMIT_PER_PAGE = 4;
+
     #[Route('', name: 'app_product_index', methods: ['GET'])]
     #[Breadcrumb([
         ['label' => 'product.list'],
     ])]
-    public function index(ProductRepository $productRepository): Response
-    {
+    public function index(
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginator,
+        Request $request,
+    ): Response {
+        $qb = $entityManager->createQueryBuilder()
+            ->select('p')
+            ->from(Product::class, 'p');
+        $query = $qb->getQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            self::LIMIT_PER_PAGE
+        );
+
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 
