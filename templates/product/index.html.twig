@@ -2,6 +2,11 @@
 
 {% block title %}Product index{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ knp_pagination_rel_links(pagination) }}
+{% endblock %}
+
 {% block content %}
     <div class="flex justify-between pb-4">
         <h1>{{ 'products'|trans }}</h1>
@@ -14,25 +19,31 @@
     </div>
 
     <div class="relative overflow-x-auto">
+        <div class="count">
+            {{ 'number_of_element'|trans }}: {{ pagination.getTotalItemCount }}
+        </div>
+
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">{{ 'id'|trans }}</th>
-                    <th scope="col" class="px-6 py-3">{{ 'name'|trans }}</th>
-                    <th scope="col" class="px-6 py-3">{{ 'created_at'|trans }}</th>
-                    <th scope="col" class="px-6 py-3">{{ 'updated_at'|trans }}</th>
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.name') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'name'|trans, 'p.name') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.createdAt') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'created_at'|trans, 'p.createdAt') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.updatedAt') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'updated_at'|trans, 'p.updatedAt') }}
+                    </th>
                     <th scope="col" class="px-6 py-3">{{ 'actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
-            {% for product in products %}
+            {% for product in pagination %}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ product.id }}
-                    </th>
-                    <td class="px-6 py-4">
                         {{ product.name }}
-                    </td>
+                    </th>
                     <td class="px-6 py-4">
                         {{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}
                     </td>
@@ -50,5 +61,9 @@
             {% endfor %}
             </tbody>
         </table>
+
+        <div class="pt-4 flex justify-end">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     </div>
 {% endblock %}
