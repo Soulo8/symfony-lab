@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Enum\Image;
+use App\Enum\Path;
 use App\Factory\ProductFactory;
 use App\Factory\ProductImageFactory;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,9 +15,6 @@ use Zenstruck\Foundry\Test\Factories;
 class ProductTest extends WebTestCase
 {
     use Factories;
-
-    private const IMAGE_FIXTURE_PATH = '/../../src/DataFixtures/paysage.jpg';
-    private const FOLDER_UPLOADS_TEST_PATH = '/../../uploads_test/products';
 
     public function testIndex(): void
     {
@@ -35,8 +34,8 @@ class ProductTest extends WebTestCase
         $buttonCrawlerNode = $crawler->selectButton('save');
         $form = $buttonCrawlerNode->form();
 
-        $filePath = __DIR__.self::IMAGE_FIXTURE_PATH;
-        $uploadedFile = new UploadedFile($filePath, 'paysage.jpg', 'image/jpeg', null);
+        $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
+        $uploadedFile = new UploadedFile($filePath, 'landscape.jpg', 'image/jpeg', null);
 
         $form['product[name]'] = 'Mon produit';
         $client->submit($form, [
@@ -50,8 +49,7 @@ class ProductTest extends WebTestCase
     public function testEdit(): void
     {
         $client = static::createClient();
-
-        $filePath = __DIR__.self::IMAGE_FIXTURE_PATH;
+        $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
 
         $product = ProductFactory::createOne([
             'imageFile' => new File($filePath),
@@ -91,10 +89,12 @@ class ProductTest extends WebTestCase
 
     protected function tearDown(): void
     {
+        $projectDir = self::$kernel->getProjectDir();
+
         parent::tearDown();
 
         $filesystem = new Filesystem();
-        $uploadDir = __DIR__.self::FOLDER_UPLOADS_TEST_PATH;
+        $uploadDir = sprintf('%s%s', $projectDir, Path::FOLDER_UPLOADS_TEST->value);
 
         if ($filesystem->exists($uploadDir)) {
             $files = glob($uploadDir.'/*');
