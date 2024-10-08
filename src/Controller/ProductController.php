@@ -44,7 +44,8 @@ class ProductController extends AbstractController
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
-            self::LIMIT_PER_PAGE
+            self::LIMIT_PER_PAGE,
+            ['defaultSortFieldName' => 'p.createdAt', 'defaultSortDirection' => 'desc']
         );
 
         return $this->render('product/index.html.twig', [
