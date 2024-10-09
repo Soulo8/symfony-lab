@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
 use App\Service\ProductImageService;
+use App\Service\ProductSearchManagement;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -34,12 +35,15 @@ class ProductController extends AbstractController
     public function index(
         EntityManagerInterface $entityManager,
         PaginatorInterface $paginator,
+        ProductSearchManagement $productSearchManagement,
         Request $request,
     ): Response {
         $qb = $entityManager->createQueryBuilder()
             ->select('p')
             ->from(Product::class, 'p');
-        $query = $qb->getQuery();
+        $query = $productSearchManagement
+            ->addConditions($qb, $request)
+            ->getQuery();
 
         $pagination = $paginator->paginate(
             $query,
@@ -48,8 +52,12 @@ class ProductController extends AbstractController
             ['defaultSortFieldName' => 'p.createdAt', 'defaultSortDirection' => 'desc']
         );
 
+        $formSearch = $productSearchManagement->buildForm();
+        $formSearch->handleRequest($request);
+
         return $this->render('product/index.html.twig', [
             'pagination' => $pagination,
+            'formSearch' => $formSearch,
         ]);
     }
 
