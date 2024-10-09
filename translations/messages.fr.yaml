@@ -1,4 +1,5 @@
 actions: Actions
+clear_filters: Effacer les filtres
 confirme:
   delete:
     item: Êtes-vous sûr de vouloir supprimer cet élément ?
@@ -6,6 +7,7 @@ create: Créer
 created_at: Créé le
 delete: Supprimer
 edit: Modifier
+filter: Filtrer
 first_page: Première page
 home: Accueil
 image: Image

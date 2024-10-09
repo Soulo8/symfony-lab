@@ -18,6 +18,8 @@
         </a>
     </div>
 
+    {{ include('product/_form_search.html.twig') }}
+
     <div class="relative overflow-x-auto">
         <div class="count">
             {{ 'number_of_element'|trans }}: {{ pagination.getTotalItemCount }}
