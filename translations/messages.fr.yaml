@@ -28,5 +28,8 @@ record:
   modified: Enregistrement modifié.
 save: Enregistrer
 show: Afficher
+sub_tag: Sous tag
+tag: Tag
+tags: Tags
 updated_at: Mis à jour le
 you_have_not_added_an_image: Vous n'avez pas ajouté d'image.

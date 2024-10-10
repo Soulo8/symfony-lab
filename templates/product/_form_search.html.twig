@@ -1,11 +1,20 @@
 {{ form_start(formSearch) }}
-    <div class="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
-        <div class="sm:col-span-2">
-            {{ form_row(formSearch.name) }}
-        </div>
-        <div class="sm:col-span-3 content-end sm:mb-1">
-            <button class="btn">{{ 'filter'|trans }}</button>
-            <a href="{{ path('app_product_index') }}" class="link">{{ 'clear_filters'|trans }}</a>
+    <div data-controller="tag"
+        data-tag-sub-tags-value="{{ subTags|serialize(format = 'json') }}">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-8">
+            <div class="sm:col-span-2">
+                {{ form_row(formSearch.name) }}
+            </div>
+            <div class="sm:col-span-2">
+                {{ form_row(formSearch.tag) }}
+            </div>
+            <div class="sm:col-span-2">
+                {{ form_row(formSearch.subTag) }}
+            </div>
+            <div class="sm:col-span-3 content-end sm:mb-1">
+                <button class="btn">{{ 'filter'|trans }}</button>
+                <a href="{{ path('app_product_index') }}" class="link">{{ 'clear_filters'|trans }}</a>
+            </div>
         </div>
     </div>
 {{ form_end(formSearch) }}

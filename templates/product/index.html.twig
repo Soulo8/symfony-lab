@@ -31,6 +31,9 @@
                     <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.name') %}sorted{% endif %}">
                         {{ knp_pagination_sortable(pagination, 'name'|trans, 'p.name') }}
                     </th>
+                    <th scope="col" class="px-6 py-3">
+                        {{ 'tags'|trans }}
+                    </th>
                     <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.createdAt') %}sorted{% endif %}">
                         {{ knp_pagination_sortable(pagination, 'created_at'|trans, 'p.createdAt') }}
                     </th>
@@ -47,10 +50,17 @@
                         {{ product.name }}
                     </th>
                     <td class="px-6 py-4">
-                        {{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}
+                        {% if product.tags is not empty %}
+                            <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                                {{ product.tags|map(p => "<li>#{p.name}</li>")|join|raw }}
+                            </ul>
+                        {% endif %}
                     </td>
                     <td class="px-6 py-4">
-                        {{ product.updatedAt ? product.updatedAt|date('Y-m-d H:i:s') : '' }}
+                        {{ product.createdAt ? product.createdAt|date('d/m/Y H:i:s') : '' }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i:s') : '' }}
                     </td>
                     <td class="px-6 py-4">
                         <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="link">{{ 'edit'|trans }}</a>
