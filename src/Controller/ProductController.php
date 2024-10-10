@@ -7,6 +7,7 @@ use App\Entity\ProductImage;
 use App\Form\ProductType;
 use App\Service\ProductImageService;
 use App\Service\ProductSearchManagement;
+use App\Service\TagManagement;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -37,6 +38,7 @@ class ProductController extends AbstractController
         PaginatorInterface $paginator,
         ProductSearchManagement $productSearchManagement,
         Request $request,
+        TagManagement $tagManagement,
     ): Response {
         $qb = $entityManager->createQueryBuilder()
             ->select('p')
@@ -58,6 +60,7 @@ class ProductController extends AbstractController
         return $this->render('product/index.html.twig', [
             'pagination' => $pagination,
             'formSearch' => $formSearch,
+            'subTags' => $tagManagement->getSubTagsGroupByTag(),
         ]);
     }
 

@@ -23,3 +23,10 @@ js-build:
 
 test:
 	docker compose exec web ./vendor/bin/phpunit
+
+drop-test-db:
+	docker compose exec web php bin/console --env=test --force doctrine:database:drop
+
+create-test-db:
+	docker compose exec web php bin/console --env=test doctrine:database:create
+	docker compose exec web php bin/console --env=test doctrine:schema:create
