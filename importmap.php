@@ -62,4 +62,7 @@ return [
         'version' => '2.5.2',
         'type' => 'css',
     ],
+    'tom-select' => [
+        'version' => '2.3.1',
+    ],
 ];
