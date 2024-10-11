@@ -41,6 +41,7 @@ class ProductType extends AbstractType
                 'required' => null === $product->getId() ? true : false,
                 'label' => 'images',
             ])
+            ->add('tags', TagAutocompleteField::class)
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 [$this, 'onPreSetData']
