@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataFixtures;
 
 use App\Factory\ProductFactory;
@@ -9,20 +11,20 @@ use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ProductDevFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
+final class ProductDevFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {
         ProductFactory::createMany(
             7,
-            function () {
+            static function () {
                 return ['tags' => [TagFactory::random(['parent' => null])]];
             }
         );
 
         ProductFactory::createMany(
             7,
-            function () {
+            static function () {
                 return ['tags' => TagFactory::randomRangeWithParent(2, 2)];
             }
         );
@@ -30,13 +32,19 @@ class ProductDevFixtures extends Fixture implements FixtureGroupInterface, Depen
         $manager->flush();
     }
 
-    public function getDependencies()
+    /**
+     * @return array<string>
+     */
+    public function getDependencies(): array
     {
         return [
             TagDevFixtures::class,
         ];
     }
 
+    /**
+     * @return array<string>
+     */
     public static function getGroups(): array
     {
         return ['dev'];

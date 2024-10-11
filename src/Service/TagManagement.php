@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Tag;
 use App\Repository\TagRepository;
 use Illuminate\Support\Collection;
 
-class TagManagement
+final class TagManagement
 {
     public function __construct(
         private TagRepository $tagRepository,
@@ -14,25 +16,29 @@ class TagManagement
     }
 
     /**
-     * @return array<string>
+     * @return array<array<int|string>>
      */
     public function getSubTagsGroupByTag(): array
     {
         $subTags = $this->tagRepository->findWithParentOrderedByName();
-        $subTagsGroupByTag = collect($subTags)
-            ->groupBy(function (Tag $tag): int {
+
+        /**
+         * @var array<array<int|string>> $groupedSubTags
+         */
+        $groupedSubTags = collect($subTags)
+            ->groupBy(static function (Tag $tag): int {
                 return $tag->getParent()->getId();
             })
-            ->map(function (Collection $group): Collection {
-                return $group->map(function (Tag $tag) {
+            ->map(static function (Collection $group): array {
+                return $group->map(static function (Tag $tag) {
                     return [
                         'id' => $tag->getId(),
                         'name' => $tag->getName(),
                     ];
-                });
+                })->all();
             })
             ->all();
 
-        return $subTagsGroupByTag;
+        return $groupedSubTags;
     }
 }

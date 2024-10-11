@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Product;
@@ -14,15 +16,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class ProductType extends AbstractType
+final class ProductType extends AbstractType
 {
     public function __construct(
         private UrlGeneratorInterface $router,
     ) {
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+    /**
+     * @param array<string, mixed> $options
+     */
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options,
+    ): void {
         $product = $builder->getData();
 
         $builder
@@ -31,7 +38,12 @@ class ProductType extends AbstractType
             ])
             ->add('imageFile', VichImageType::class, [
                 'image_uri' => false,
-                'download_uri' => null === $product->getId() ? false : $this->router->generate('app_product_image', ['id' => $product->getId()]),
+                'download_uri' => null === $product->getId()
+                    ? false
+                    : $this->router->generate(
+                        'app_product_image',
+                        ['id' => $product->getId()]
+                    ),
                 'required' => null === $product->getId() ? true : false,
                 'label' => 'image',
             ])

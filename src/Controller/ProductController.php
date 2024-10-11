@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Product;
@@ -25,7 +27,7 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
     'label' => 'home',
     'route' => 'app_home',
 ])]
-class ProductController extends AbstractController
+final class ProductController extends AbstractController
 {
     private const int LIMIT_PER_PAGE = 4;
 
@@ -54,7 +56,10 @@ class ProductController extends AbstractController
             $query,
             $request->query->getInt('page', 1),
             self::LIMIT_PER_PAGE,
-            ['defaultSortFieldName' => 'p.createdAt', 'defaultSortDirection' => 'desc']
+            [
+                'defaultSortFieldName' => 'p.createdAt',
+                'defaultSortDirection' => 'desc',
+            ]
         );
 
         $formSearch = $productSearchManagement->buildForm();
@@ -82,7 +87,11 @@ class ProductController extends AbstractController
 
         $product = new Product();
 
-        $form = $this->createForm(ProductType::class, $product, ['validation_groups' => ['create']]);
+        $form = $this->createForm(
+            ProductType::class,
+            $product,
+            ['validation_groups' => ['create']]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,7 +103,10 @@ class ProductController extends AbstractController
                 $errors = $validator->validate($productImage);
 
                 if (count($errors) > 0) {
-                    $this->addFlash('error', $translator->trans('one_of_the_files_is_not_an_image'));
+                    $this->addFlash(
+                        'error',
+                        $translator->trans('one_of_the_files_is_not_an_image')
+                    );
 
                     return $this->render('product/new.html.twig', [
                         'product' => $product,
@@ -106,7 +118,10 @@ class ProductController extends AbstractController
             }
 
             if (0 === $product->getImages()->count()) {
-                $this->addFlash('error', $translator->trans('you_have_not_added_an_image'));
+                $this->addFlash(
+                    'error',
+                    $translator->trans('you_have_not_added_an_image')
+                );
 
                 return $this->render('product/new.html.twig', [
                     'product' => $product,
@@ -119,7 +134,11 @@ class ProductController extends AbstractController
 
             $this->addFlash('success', $translator->trans('record.added'));
 
-            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_product_index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('product/new.html.twig', [
@@ -169,12 +188,19 @@ class ProductController extends AbstractController
                     $errors = $validator->validate($productImage);
 
                     if (count($errors) > 0) {
-                        $this->addFlash('error', $translator->trans('one_of_the_files_is_not_an_image'));
+                        $this->addFlash(
+                            'error',
+                            $translator->trans(
+                                'one_of_the_files_is_not_an_image'
+                            )
+                        );
 
                         return $this->render('product/edit.html.twig', [
                             'product' => $product,
                             'form' => $form,
-                            'images' => $productImageService->getImagesData($product),
+                            'images' => $productImageService->getImagesData(
+                                $product
+                            ),
                         ], new Response(null, 422));
                     }
 
@@ -182,20 +208,32 @@ class ProductController extends AbstractController
                 }
 
                 if (0 === $product->getImages()->count()) {
-                    $this->addFlash('error', $translator->trans('you_have_not_added_an_image'));
+                    $this->addFlash(
+                        'error',
+                        $translator->trans('you_have_not_added_an_image')
+                    );
 
                     return $this->render('product/edit.html.twig', [
                         'product' => $product,
                         'form' => $form,
-                        'images' => $productImageService->getImagesData($product),
+                        'images' => $productImageService->getImagesData(
+                            $product
+                        ),
                     ], new Response(null, 422));
                 }
 
                 $entityManager->flush();
 
-                $this->addFlash('success', $translator->trans('record.modified'));
+                $this->addFlash(
+                    'success',
+                    $translator->trans('record.modified')
+                );
 
-                return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute(
+                    'app_product_index',
+                    [],
+                    Response::HTTP_SEE_OTHER
+                );
             }
         }
 
@@ -213,19 +251,35 @@ class ProductController extends AbstractController
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
     ): Response {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete'.$product->getId(),
+            $request->getPayload()->getString('_token')
+        )) {
             $entityManager->remove($product);
             $entityManager->flush();
 
             $this->addFlash('success', $translator->trans('record.deleted'));
         }
 
-        return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute(
+            'app_product_index',
+            [],
+            Response::HTTP_SEE_OTHER
+        );
     }
 
-    #[Route('/download-image/{id}', name: 'app_product_image', methods: ['GET'])]
-    public function downloadImageAction(Product $product, DownloadHandler $downloadHandler): Response
-    {
-        return $downloadHandler->downloadObject($product, $fileField = 'imageFile');
+    #[Route(
+        '/download-image/{id}',
+        name: 'app_product_image',
+        methods: ['GET']
+    )]
+    public function downloadImageAction(
+        Product $product,
+        DownloadHandler $downloadHandler,
+    ): Response {
+        return $downloadHandler->downloadObject(
+            $product,
+            $fileField = 'imageFile'
+        );
     }
 }

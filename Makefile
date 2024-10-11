@@ -7,7 +7,11 @@ php-cs-fixer:
 phpstan:
 	docker compose exec web ./vendor/bin/phpstan analyze
 
+phpinsights:
+	docker compose exec web ./vendor/bin/phpinsights
+
 php-linters: php-cs-fixer phpstan
+	docker compose exec web ./vendor/bin/phpinsights --no-interaction
 	docker compose exec web ./bin/console lint:yaml config --parse-tags
 	docker compose exec web ./bin/console lint:twig templates
 	docker compose exec web ./bin/console lint:xliff translations

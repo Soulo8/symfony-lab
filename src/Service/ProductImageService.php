@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-class ProductImageService
+final class ProductImageService
 {
     private UploaderHelper $uploaderHelper;
 

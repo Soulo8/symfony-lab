@@ -56,6 +56,9 @@ jobs:
       - name: Run PHPStan
         run: ./vendor/bin/phpstan analyze
 
+      - name: Run PHP Insights
+        run: ./vendor/bin/phpinsights
+
   eslint:
     name: Linters JavaScript
     runs-on: ubuntu-latest
