@@ -51,7 +51,8 @@ return [
     */
 
     'exclude' => [
-        //  'path/to/directory-or-file'
+        'phpinsights.php',
+        'migrations',
     ],
 
     'add' => [
@@ -61,7 +62,8 @@ return [
     ],
 
     'remove' => [
-        //  ExampleInsight::class,
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
+        SlevomatCodingStandard\Sniffs\ControlStructures\DisallowYodaComparisonSniff::class,
     ],
 
     'config' => [
