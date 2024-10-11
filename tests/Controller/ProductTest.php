@@ -6,7 +6,9 @@ use App\Enum\Image;
 use App\Enum\Path;
 use App\Factory\ProductFactory;
 use App\Factory\ProductImageFactory;
+use App\Factory\TagFactory;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,6 +29,7 @@ class ProductTest extends WebTestCase
     public function testNew(): void
     {
         $client = static::createClient();
+
         $crawler = $client->request('GET', '/product/new');
 
         $this->assertResponseStatusCodeSame(200);
@@ -34,10 +37,23 @@ class ProductTest extends WebTestCase
         $buttonCrawlerNode = $crawler->selectButton('save');
         $form = $buttonCrawlerNode->form();
 
+        $tag = TagFactory::createOne();
+
+        $dom = new \DOMDocument();
+        $node = $dom->createElement('option', $tag->getName());
+        $node->setAttribute('value', strval($tag->getId()));
+        /** @var ChoiceFormField $fieldTags */
+        $fieldTags = $form->get('product[tags]');
+        $fieldTags->addChoice($node);
+
+        // To display the data contained in the form
+        // dump($form->all());
+
         $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
         $uploadedFile = new UploadedFile($filePath, 'landscape.jpg', 'image/jpeg', null);
 
         $form['product[name]'] = 'Mon produit';
+        $form['product[tags]'] = [$tag->getId()];
         $client->submit($form, [
             'product[imageFile][file]' => $uploadedFile,
             'product[newImages][0]' => $uploadedFile,

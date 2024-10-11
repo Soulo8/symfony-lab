@@ -99,7 +99,7 @@ class ProductSearchManagement
         return $form;
     }
 
-    public function addConditions(QueryBuilder $qb, Request $request): QueryBuilder
+    public function addFilters(QueryBuilder $qb, Request $request): QueryBuilder
     {
         $all = $request->query->all();
         if (empty($all) || !array_key_exists('form', $all)) {

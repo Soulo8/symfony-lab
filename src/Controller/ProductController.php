@@ -39,12 +39,15 @@ class ProductController extends AbstractController
         ProductSearchManagement $productSearchManagement,
         Request $request,
         TagManagement $tagManagement,
+        TranslatorInterface $translator,
     ): Response {
+        $this->addFlash('info', $translator->trans('info.product.index'));
+
         $qb = $entityManager->createQueryBuilder()
             ->select('p')
             ->from(Product::class, 'p');
         $query = $productSearchManagement
-            ->addConditions($qb, $request)
+            ->addFilters($qb, $request)
             ->getQuery();
 
         $pagination = $paginator->paginate(
@@ -75,6 +78,8 @@ class ProductController extends AbstractController
         TranslatorInterface $translator,
         ValidatorInterface $validator,
     ): Response {
+        $this->addFlash('info', $translator->trans('info.product.new'));
+
         $product = new Product();
 
         $form = $this->createForm(ProductType::class, $product, ['validation_groups' => ['create']]);
@@ -136,6 +141,8 @@ class ProductController extends AbstractController
         ValidatorInterface $validator,
         ProductImageService $productImageService,
     ): Response {
+        $this->addFlash('info', $translator->trans('info.product.edit'));
+
         $originalImages = new ArrayCollection();
         foreach ($product->getImages() as $image) {
             $originalImages->add($image);

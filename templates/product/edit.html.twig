@@ -25,6 +25,7 @@
 
         <div {{ react_component('ProductImages', { images: images }) }}></div>
 
+        {{ form_row(form.tags) }}
         {{ form_widget(form._token) }}
 
         <button class="btn" name="save">{{ 'save'|trans }}</button>

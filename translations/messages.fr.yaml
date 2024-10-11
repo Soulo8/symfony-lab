@@ -10,6 +10,13 @@ edit: Modifier
 filter: Filtrer
 first_page: Première page
 home: Accueil
+info:
+  product:
+    index: Filtrage des sous-tags réalisé avec Stimulus.
+    new: Liste des tags réalisée avec Symfony UX Autocomplete.
+    edit: |
+      Liste des tags réalisée avec Symfony UX Autocomplete.
+      Upload des images réalisé avec VichUploaderBundle, une CollectionType et React. 
 image: Image
 images: Images
 last_page: Dernière page
