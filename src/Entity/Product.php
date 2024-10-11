@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
@@ -26,7 +28,11 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Vich\UploadableField(
+        mapping: 'products',
+        fileNameProperty: 'imageName',
+        size: 'imageSize'
+    )]
     #[Assert\Image]
     #[Assert\NotNull(groups: ['create'])]
     private ?File $imageFile = null;
@@ -41,7 +47,11 @@ class Product
      * @var Collection<int, ProductImage>
      */
     #[ORM\OrderBy(['position' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: ProductImage::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(
+        targetEntity: ProductImage::class,
+        mappedBy: 'product',
+        cascade: ['persist', 'remove']
+    )]
     private Collection $images;
 
     /**
@@ -61,7 +71,8 @@ class Product
         $criteria = Criteria::create()
             ->orderBy(['position' => Criteria::ASC]);
 
-        $this->images = (new ArrayCollection($this->images->toArray()))->matching($criteria);
+        $this->images = (new ArrayCollection($this->images->toArray()))
+            ->matching($criteria);
     }
 
     public function getId(): ?int

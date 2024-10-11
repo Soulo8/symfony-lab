@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ProductImageRepository;
@@ -22,7 +24,11 @@ class ProductImage
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Vich\UploadableField(
+        mapping: 'products',
+        fileNameProperty: 'imageName',
+        size: 'imageSize'
+    )]
     #[Assert\Image]
     private ?File $imageFile = null;
 

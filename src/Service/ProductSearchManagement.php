@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Dto\ProductSearch;
@@ -16,7 +18,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProductSearchManagement
+final class ProductSearchManagement
 {
     public function __construct(
         private FormFactoryInterface $formFactory,
@@ -26,17 +28,23 @@ class ProductSearchManagement
 
     public function buildForm(): FormInterface
     {
-        return $this->formFactory->createBuilder(FormType::class, new ProductSearch(), [
-            'method' => 'GET',
-            'csrf_protection' => false,
-        ])
+        return $this->formFactory->createBuilder(
+            FormType::class,
+            new ProductSearch(),
+            [
+                'method' => 'GET',
+                'csrf_protection' => false,
+            ]
+        )
             ->add('name', TextType::class, [
                 'label' => 'name',
                 'required' => false,
             ])
             ->add('tag', EntityType::class, [
                 'class' => Tag::class,
-                'query_builder' => function (TagRepository $tagRepository): QueryBuilder {
+                'query_builder' => static function (
+                    TagRepository $tagRepository,
+                ): QueryBuilder {
                     return $tagRepository->findWithoutParentQueryBuilder()
                         ->orderBy('t.name', 'ASC');
                 },
@@ -74,8 +82,11 @@ class ProductSearchManagement
         } else {
             $form->add('subTag', EntityType::class, [
                 'class' => Tag::class,
-                'query_builder' => function (TagRepository $tagRepository) use ($tag): QueryBuilder {
-                    return $tagRepository->findChildrensOfParentQueryBuilder($tag)
+                'query_builder' => static function (
+                    TagRepository $tagRepository,
+                ) use ($tag): QueryBuilder {
+                    return $tagRepository
+                        ->findChildrensOfParentQueryBuilder($tag)
                         ->orderBy('t.name', 'ASC');
                 },
                 'choice_label' => 'name',
@@ -84,6 +95,35 @@ class ProductSearchManagement
                 'attr' => ['data-tag-target' => 'subTagList'],
             ]);
         }
+    }
+
+    public function addFilters(QueryBuilder $qb, Request $request): QueryBuilder
+    {
+        $all = $request->query->all();
+        if ([] === $all || !array_key_exists('form', $all)) {
+            return $qb;
+        }
+
+        $data = $all['form'];
+        if (null !== $data) {
+            $qb->andWhere('p.name LIKE :name')
+                ->setParameter('name', '%'.$data['name'].'%');
+        }
+
+        if ('' !== $data['subTag']) {
+            $qb->innerJoin('p.tags', 't')
+                ->andWhere('t.id = :tag')
+                ->setParameter('tag', $data['subTag']);
+        } elseif ('' !== $data['tag']) {
+            $qb->innerJoin('p.tags', 't')
+                ->andWhere($qb->expr()->orX(
+                    't.id = :tag',
+                    't.parent = :tag'
+                ))
+                ->setParameter('tag', $data['tag']);
+        }
+
+        return $qb;
     }
 
     private function addSubTagDisabled(FormInterface $form): FormInterface
@@ -97,34 +137,5 @@ class ProductSearchManagement
         ]);
 
         return $form;
-    }
-
-    public function addFilters(QueryBuilder $qb, Request $request): QueryBuilder
-    {
-        $all = $request->query->all();
-        if (empty($all) || !array_key_exists('form', $all)) {
-            return $qb;
-        }
-
-        $data = $all['form'];
-        if (null !== $data) {
-            $qb->andWhere('p.name LIKE :name')
-                ->setParameter('name', '%'.$data['name'].'%');
-        }
-
-        if (!empty($data['subTag'])) {
-            $qb->innerJoin('p.tags', 't')
-                ->andWhere('t.id = :tag')
-                ->setParameter('tag', $data['subTag']);
-        } elseif (!empty($data['tag'])) {
-            $qb->innerJoin('p.tags', 't')
-                ->andWhere($qb->expr()->orX(
-                    't.id = :tag',
-                    't.parent = :tag'
-                ))
-                ->setParameter('tag', $data['tag']);
-        }
-
-        return $qb;
     }
 }

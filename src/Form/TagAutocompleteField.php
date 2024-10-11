@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Tag;
@@ -11,13 +13,15 @@ use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;
 use Symfony\UX\Autocomplete\Form\BaseEntityAutocompleteType;
 
 #[AsEntityAutocompleteField]
-class TagAutocompleteField extends AbstractType
+final class TagAutocompleteField extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'class' => Tag::class,
-            'query_builder' => function (TagRepository $tagRepository): QueryBuilder {
+            'query_builder' => static function (
+                TagRepository $tagRepository,
+            ): QueryBuilder {
                 return $tagRepository->createQueryBuilder('t')
                     ->orderBy('t.name', 'ASC');
             },
