@@ -47,7 +47,7 @@ class ProductController extends AbstractController
             ->select('p')
             ->from(Product::class, 'p');
         $query = $productSearchManagement
-            ->addConditions($qb, $request)
+            ->addFilters($qb, $request)
             ->getQuery();
 
         $pagination = $paginator->paginate(
