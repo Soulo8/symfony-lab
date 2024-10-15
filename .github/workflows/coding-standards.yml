@@ -50,6 +50,9 @@ jobs:
       - name: Lint Composer config
         run: composer validate --strict
 
+      - name: Check if any dependencies are compromised
+        run: composer audit
+
       - name: Run PHP-CS-Fixer
         run: ./vendor/bin/php-cs-fixer fix --dry-run
 
