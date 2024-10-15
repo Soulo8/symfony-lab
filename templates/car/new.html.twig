@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'car.new'|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'car.new'|trans }}</h1>
+
+    {{ include('car/_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'car.edit'|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'car.edit'|trans }}</h1>
+
+    {{ include('car/_form.html.twig') }}
+    {{ include('car/_delete_form.html.twig') }}
+{% endblock %}

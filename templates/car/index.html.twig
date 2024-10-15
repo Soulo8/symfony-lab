@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'cars'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ knp_pagination_rel_links(pagination) }}
+{% endblock %}
+
+{% block content %}
+    <div class="flex justify-between pb-4">
+        <h1>{{ 'cars'|trans }}</h1>
+        <a href="{{ path('app_car_new') }}" class="btn inline-flex items-center justify-center">
+            <svg class="w-8 h-6 me-3 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+            </svg>
+            <span class="w-full">{{ 'create'|trans }}</span>
+        </a>
+    </div>
+
+    {{ include('car/_form_search.html.twig') }}
+
+    <div class="relative overflow-x-auto">
+        <div class="count">
+            {{ 'number_of_element'|trans }}: {{ pagination.getTotalItemCount }}
+        </div>
+
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('c.name') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'name'|trans, 'c.name') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('c.createdAt') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'created_at'|trans, 'c.createdAt') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('c.updatedAt') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'updated_at'|trans, 'c.updatedAt') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3">{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for car in pagination %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ car.name }}
+                    </th>
+                    <td class="px-6 py-4">
+                        {{ car.createdAt ? car.createdAt|date('d/m/Y H:i:s') : '' }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ car.updatedAt ? car.updatedAt|date('d/m/Y H:i:s') : '' }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="{{ path('app_car_edit', {'id': car.id}) }}" class="link">{{ 'edit'|trans }}</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">{{ 'no_records_found'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pt-4 flex justify-end">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+{% endblock %}
