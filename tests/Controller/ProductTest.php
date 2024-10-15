@@ -7,32 +7,41 @@ use App\Enum\Path;
 use App\Factory\ProductFactory;
 use App\Factory\ProductImageFactory;
 use App\Factory\TagFactory;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Zenstruck\Foundry\Test\Factories;
 
 class ProductTest extends WebTestCase
 {
     use Factories;
 
+    private KernelBrowser $client;
+    private TranslatorInterface $translator;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+        $this->translator = static::getContainer()->get(TranslatorInterface::class);
+    }
+
     public function testIndex(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/product');
+        $this->client->request('GET', '/product');
 
-        $this->assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(200);
+        self::assertPageTitleContains($this->translator->trans('products'));
     }
 
     public function testNew(): void
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/product/new');
 
-        $crawler = $client->request('GET', '/product/new');
-
-        $this->assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(200);
 
         $buttonCrawlerNode = $crawler->selectButton('save');
         $form = $buttonCrawlerNode->form();
@@ -52,19 +61,20 @@ class ProductTest extends WebTestCase
         $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
         $uploadedFile = new UploadedFile($filePath, 'landscape.jpg', 'image/jpeg', null);
 
-        $form['product[name]'] = 'Mon produit';
-        $form['product[tags]'] = [$tag->getId()];
-        $client->submit($form, [
+        $this->client->submit($form, [
+            'product[name]' => 'Testing',
+            'product[tags]' => [$tag->getId()],
             'product[imageFile][file]' => $uploadedFile,
             'product[newImages][0]' => $uploadedFile,
         ]);
 
-        $this->assertResponseRedirects('/product', 303);
+        self::assertResponseRedirects('/product', 303);
+
+        ProductFactory::assert()->exists(['name' => 'Testing']);
     }
 
     public function testEdit(): void
     {
-        $client = static::createClient();
         $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
 
         $product = ProductFactory::createOne([
@@ -72,34 +82,28 @@ class ProductTest extends WebTestCase
             'images' => [ProductImageFactory::createOne(['imageFile' => new File($filePath)])],
         ]);
 
-        $crawler = $client->request('GET', '/product/'.$product->getId().'/edit');
+        $this->client->request('GET', sprintf('/product/%s/edit', $product->getId()));
 
-        $this->assertResponseStatusCodeSame(200);
+        self::assertResponseStatusCodeSame(200);
 
-        $buttonCrawlerNode = $crawler->selectButton('save');
-        $form = $buttonCrawlerNode->form();
-
-        $form['product[name]'] = 'Mon produit modifié';
-        $client->submit($form, [
+        $this->client->submitForm('save', [
+            'product[name]' => 'Something New',
             'product[newImages][0]' => $product->getImages()->first()->getImageFile(),
         ]);
 
-        $this->assertResponseRedirects('/product', 303);
+        self::assertResponseRedirects('/product', 303);
+
+        ProductFactory::assert()->exists(['name' => 'Something New']);
     }
 
     public function testDelete(): void
     {
-        $client = static::createClient();
-
         $product = ProductFactory::createOne();
 
-        $crawler = $client->request('GET', '/product/'.$product->getId().'/edit');
+        $this->client->request('GET', sprintf('/product/%s/edit', $product->getId()));
+        $this->client->submitForm('delete');
 
-        $buttonCrawlerNode = $crawler->selectButton('delete');
-        $form = $buttonCrawlerNode->form();
-        $client->submit($form);
-
-        $this->assertResponseRedirects('/product', 303);
+        self::assertResponseRedirects('/product', 303);
         ProductFactory::assert()->notExists(['id' => $product->getId()]);
     }
 
