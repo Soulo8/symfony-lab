@@ -71,4 +71,7 @@ return [
         'version' => '2.3.1',
         'type' => 'css',
     ],
+    'filepond' => [
+        'version' => '4.31.4',
+    ],
 ];
