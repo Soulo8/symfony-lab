@@ -34,3 +34,6 @@ drop-test-db:
 create-test-db:
 	docker compose exec web php bin/console --env=test doctrine:database:create
 	docker compose exec web php bin/console --env=test doctrine:schema:create
+
+composer-audit:
+	docker compose exec web composer audit
