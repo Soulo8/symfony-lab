@@ -51,6 +51,7 @@ return [
     */
 
     'exclude' => [
+        'importmap.php',
         'phpinsights.php',
         'migrations',
     ],
