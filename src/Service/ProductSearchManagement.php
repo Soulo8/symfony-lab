@@ -105,16 +105,17 @@ final class ProductSearchManagement
         }
 
         $data = $all['form'];
-        if (null !== $data) {
+
+        if (array_key_exists('name', $data) && '' !== $data['name']) {
             $qb->andWhere('p.name LIKE :name')
                 ->setParameter('name', '%'.$data['name'].'%');
         }
 
-        if ('' !== $data['subTag']) {
+        if (array_key_exists('subTag', $data) && '' !== $data['subTag']) {
             $qb->innerJoin('p.tags', 't')
                 ->andWhere('t.id = :tag')
                 ->setParameter('tag', $data['subTag']);
-        } elseif ('' !== $data['tag']) {
+        } elseif (array_key_exists('tag', $data) && '' !== $data['tag']) {
             $qb->innerJoin('p.tags', 't')
                 ->andWhere($qb->expr()->orX(
                     't.id = :tag',
