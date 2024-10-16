@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'products'|trans }}{% endblock %}
+{% block title %}{{ 'cars'|trans }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -9,8 +9,8 @@
 
 {% block content %}
     <div class="flex justify-between pb-4">
-        <h1>{{ 'products'|trans }}</h1>
-        <a href="{{ path('app_product_new') }}" class="btn inline-flex items-center justify-center">
+        <h1>{{ 'cars'|trans }}</h1>
+        <a href="{{ path('app_car_new') }}" class="btn inline-flex items-center justify-center">
             <svg class="w-8 h-6 me-3 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
             </svg>
@@ -18,7 +18,7 @@
         </a>
     </div>
 
-    {{ include('product/_form_search.html.twig') }}
+    {{ include('car/_form_search.html.twig') }}
 
     <div class="relative overflow-x-auto">
         <div class="count">
@@ -28,42 +28,32 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.name') %}sorted{% endif %}">
-                        {{ knp_pagination_sortable(pagination, 'name'|trans, 'p.name') }}
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('c.name') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'name'|trans, 'c.name') }}
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        {{ 'tags'|trans }}
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('c.createdAt') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'created_at'|trans, 'c.createdAt') }}
                     </th>
-                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.createdAt') %}sorted{% endif %}">
-                        {{ knp_pagination_sortable(pagination, 'created_at'|trans, 'p.createdAt') }}
-                    </th>
-                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('p.updatedAt') %}sorted{% endif %}">
-                        {{ knp_pagination_sortable(pagination, 'updated_at'|trans, 'p.updatedAt') }}
+                    <th scope="col" class="px-6 py-3 {% if pagination.isSorted('c.updatedAt') %}sorted{% endif %}">
+                        {{ knp_pagination_sortable(pagination, 'updated_at'|trans, 'c.updatedAt') }}
                     </th>
                     <th scope="col" class="px-6 py-3">{{ 'actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
-            {% for product in pagination %}
+            {% for car in pagination %}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ product.name }}
+                        {{ car.name }}
                     </th>
                     <td class="px-6 py-4">
-                        {% if product.tags is not empty %}
-                            <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-                                {{ product.tags|map(p => "<li>#{p.name}</li>")|join|raw }}
-                            </ul>
-                        {% endif %}
+                        {{ car.createdAt ? car.createdAt|date('d/m/Y H:i:s') : '' }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ product.createdAt ? product.createdAt|date('d/m/Y H:i:s') : '' }}
+                        {{ car.updatedAt ? car.updatedAt|date('d/m/Y H:i:s') : '' }}
                     </td>
                     <td class="px-6 py-4">
-                        {{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i:s') : '' }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="link">{{ 'edit'|trans }}</a>
+                        <a href="{{ path('app_car_edit', {'id': car.id}) }}" class="link">{{ 'edit'|trans }}</a>
                     </td>
                 </tr>
             {% else %}

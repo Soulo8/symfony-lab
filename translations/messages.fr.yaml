@@ -1,4 +1,9 @@
 actions: Actions
+car:
+  new: Nouvelle voiture
+  edit: Édition de voiture
+  list: Liste des voitures
+cars: Voitures
 clear_filters: Effacer les filtres
 confirme:
   delete:
@@ -7,6 +12,9 @@ create: Créer
 created_at: Créé le
 delete: Supprimer
 edit: Modifier
+file:
+  deleted: Le fichier a bien été supprimé.
+  uploaded: Le fichier a bien été téléchargé.
 filter: Filtrer
 first_page: Première page
 home: Accueil
@@ -26,7 +34,7 @@ number_of_element: Nombre d'élément
 one_of_the_files_is_not_an_image: L'un des fichiers n'est pas une image.
 product:
   new: Nouveau produit
-  edit: Édition du produit
+  edit: Édition de produit
   list: Liste des produits
 products: Produits
 record:

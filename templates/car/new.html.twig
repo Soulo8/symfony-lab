@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'car.new'|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'car.new'|trans }}</h1>
+
+    <div {{ stimulus_controller('car', {'route': 'new'}) }}>
+        {{ include('car/_form.html.twig') }}
+    </div>
+{% endblock %}

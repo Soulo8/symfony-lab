@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Returns the importmap for this application.
  *
@@ -69,6 +67,36 @@ return [
     ],
     'tom-select/dist/css/tom-select.default.css' => [
         'version' => '2.3.1',
+        'type' => 'css',
+    ],
+    'filepond' => [
+        'version' => '4.31.4',
+    ],
+    'filepond-plugin-image-preview' => [
+        'version' => '4.6.12',
+    ],
+    'filepond-plugin-file-validate-size' => [
+        'version' => '2.2.8',
+    ],
+    'filepond-plugin-file-validate-type' => [
+        'version' => '1.2.9',
+    ],
+    'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css' => [
+        'version' => '4.6.12',
+        'type' => 'css',
+    ],
+    'filepond/dist/filepond.css' => [
+        'version' => '4.31.4',
+        'type' => 'css',
+    ],
+    'filepond-plugin-file-encode' => [
+        'version' => '2.1.14',
+    ],
+    'filepond-plugin-file-poster' => [
+        'version' => '2.5.1',
+    ],
+    'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css' => [
+        'version' => '2.5.1',
         'type' => 'css',
     ],
 ];
