@@ -12,6 +12,9 @@ create: Créer
 created_at: Créé le
 delete: Supprimer
 edit: Modifier
+file:
+  deleted: Le fichier a bien été supprimé.
+  uploaded: Le fichier a bien été téléchargé.
 filter: Filtrer
 first_page: Première page
 home: Accueil

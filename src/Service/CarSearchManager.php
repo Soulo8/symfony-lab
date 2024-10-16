@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class CarSearchManagement
+final class CarSearchManager
 {
     public function __construct(
         private FormFactoryInterface $formFactory,

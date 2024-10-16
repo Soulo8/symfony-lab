@@ -5,5 +5,7 @@
 {% block content %}
     <h1>{{ 'car.new'|trans }}</h1>
 
-    {{ include('car/_form.html.twig') }}
+    <div {{ stimulus_controller('car', {'route': 'new'}) }}>
+        {{ include('car/_form.html.twig') }}
+    </div>
 {% endblock %}
