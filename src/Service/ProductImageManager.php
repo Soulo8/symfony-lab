@@ -8,13 +8,11 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-final class ProductImageService
+final class ProductImageManager
 {
-    private UploaderHelper $uploaderHelper;
-
-    public function __construct(UploaderHelper $uploaderHelper)
-    {
-        $this->uploaderHelper = $uploaderHelper;
+    public function __construct(
+        private UploaderHelper $uploaderHelper,
+    ) {
     }
 
     /**

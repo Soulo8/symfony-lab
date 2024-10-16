@@ -7,9 +7,9 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Form\ProductType;
-use App\Service\ProductImageService;
-use App\Service\ProductSearchManagement;
-use App\Service\TagManagement;
+use App\Service\ProductImageManager;
+use App\Service\ProductSearchManager;
+use App\Service\TagManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -38,9 +38,9 @@ final class ProductController extends AbstractController
     public function index(
         EntityManagerInterface $entityManager,
         PaginatorInterface $paginator,
-        ProductSearchManagement $productSearchManagement,
+        ProductSearchManager $productSearchManager,
         Request $request,
-        TagManagement $tagManagement,
+        TagManager $tagManager,
         TranslatorInterface $translator,
     ): Response {
         $this->addFlash('info', $translator->trans('info.product.index'));
@@ -48,7 +48,7 @@ final class ProductController extends AbstractController
         $qb = $entityManager->createQueryBuilder()
             ->select('p')
             ->from(Product::class, 'p');
-        $query = $productSearchManagement
+        $query = $productSearchManager
             ->addFilters($qb, $request)
             ->getQuery();
 
@@ -62,13 +62,13 @@ final class ProductController extends AbstractController
             ]
         );
 
-        $formSearch = $productSearchManagement->buildForm();
+        $formSearch = $productSearchManager->buildForm();
         $formSearch->handleRequest($request);
 
         return $this->render('product/index.html.twig', [
             'pagination' => $pagination,
             'formSearch' => $formSearch,
-            'subTags' => $tagManagement->getSubTagsGroupByTag(),
+            'subTags' => $tagManager->getSubTagsGroupByTag(),
         ]);
     }
 
@@ -158,7 +158,7 @@ final class ProductController extends AbstractController
         EntityManagerInterface $entityManager,
         TranslatorInterface $translator,
         ValidatorInterface $validator,
-        ProductImageService $productImageService,
+        ProductImageManager $productImageManager,
     ): Response {
         $this->addFlash('info', $translator->trans('info.product.edit'));
 
@@ -167,7 +167,7 @@ final class ProductController extends AbstractController
             $originalImages->add($image);
         }
 
-        $productImageService->updatePosition($request, $product);
+        $productImageManager->updatePosition($request, $product);
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -198,7 +198,7 @@ final class ProductController extends AbstractController
                         return $this->render('product/edit.html.twig', [
                             'product' => $product,
                             'form' => $form,
-                            'images' => $productImageService->getImagesData(
+                            'images' => $productImageManager->getImagesData(
                                 $product
                             ),
                         ], new Response(null, 422));
@@ -216,7 +216,7 @@ final class ProductController extends AbstractController
                     return $this->render('product/edit.html.twig', [
                         'product' => $product,
                         'form' => $form,
-                        'images' => $productImageService->getImagesData(
+                        'images' => $productImageManager->getImagesData(
                             $product
                         ),
                     ], new Response(null, 422));
@@ -240,7 +240,7 @@ final class ProductController extends AbstractController
         return $this->render('product/edit.html.twig', [
             'product' => $product,
             'form' => $form,
-            'images' => $productImageService->getImagesData($product),
+            'images' => $productImageManager->getImagesData($product),
         ]);
     }
 
@@ -273,7 +273,7 @@ final class ProductController extends AbstractController
         name: 'app_product_image',
         methods: ['GET']
     )]
-    public function downloadImageAction(
+    public function downloadImage(
         Product $product,
         DownloadHandler $downloadHandler,
     ): Response {

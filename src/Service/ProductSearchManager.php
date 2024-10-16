@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ProductSearchManagement
+final class ProductSearchManager
 {
     public function __construct(
         private FormFactoryInterface $formFactory,

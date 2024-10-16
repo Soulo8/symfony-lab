@@ -8,7 +8,7 @@ use App\Entity\Tag;
 use App\Repository\TagRepository;
 use Illuminate\Support\Collection;
 
-final class TagManagement
+final class TagManager
 {
     public function __construct(
         private TagRepository $tagRepository,
