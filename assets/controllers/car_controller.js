@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import * as FilePond from 'filepond';
+import fr_FR from 'filepond/locale/fr-fr.js'
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
@@ -12,11 +13,24 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 export default class extends Controller {
     static values = {
         route: String,
+        locale: String,
         files: Object,
         urlProcess: String
     }
 
     connect() {
+        var locale;
+        switch (this.localeValue) {
+            case 'fr':
+                locale = fr_FR;
+                break;
+            case 'en':
+                locale = {};
+                break;
+            default:
+                locale = {};
+        }
+
         if (this.routeValue === 'new') {
             FilePond.registerPlugin(
                 FilePondPluginFileEncode,
@@ -24,6 +38,8 @@ export default class extends Controller {
                 FilePondPluginFileValidateType,
                 FilePondPluginImagePreview
             );
+
+            FilePond.setOptions({...locale});
 
             FilePond.create(document.getElementById('car_images'));
         } else if (this.routeValue === 'edit') {
@@ -35,6 +51,7 @@ export default class extends Controller {
             );
 
             FilePond.setOptions({
+                ...locale,
                 server: {
                     process: {
                         url: this.urlProcessValue,

@@ -99,4 +99,7 @@ return [
         'version' => '2.5.1',
         'type' => 'css',
     ],
+    'filepond/locale/fr-fr.js' => [
+        'version' => '4.31.4',
+    ],
 ];
