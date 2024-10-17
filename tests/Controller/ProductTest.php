@@ -7,6 +7,7 @@ use App\Enum\Path;
 use App\Factory\ProductFactory;
 use App\Factory\ProductImageFactory;
 use App\Factory\TagFactory;
+use App\Service\ImageManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
@@ -20,13 +21,16 @@ class ProductTest extends WebTestCase
 {
     use Factories;
 
+    private ImageManager $imageManager;
     private KernelBrowser $client;
     private TranslatorInterface $translator;
 
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->translator = static::getContainer()->get(TranslatorInterface::class);
+        $container = static::getContainer();
+        $this->imageManager = $container->get(ImageManager::class);
+        $this->translator = $container->get(TranslatorInterface::class);
     }
 
     public function testIndex(): void
@@ -105,6 +109,19 @@ class ProductTest extends WebTestCase
 
         self::assertResponseRedirects('/product', 303);
         ProductFactory::assert()->notExists(['id' => $product->getId()]);
+    }
+
+    public function testDownloadImage(): void
+    {
+        $path = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Bird->value);
+
+        $product = ProductFactory::createOne([
+            'imageFile' => $this->imageManager->createTemporyAndUploadedFile($path),
+        ]);
+
+        $this->client->request('GET', sprintf('/product/download-image/%s', $product->getId()));
+
+        self::assertResponseStatusCodeSame(200);
     }
 
     protected function tearDown(): void
