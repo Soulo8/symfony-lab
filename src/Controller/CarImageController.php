@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Car;
 use App\Entity\CarImage;
+use App\Repository\CarImageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -66,6 +67,22 @@ final class CarImageController extends AbstractController
         $entityManager->flush();
 
         return $this->json($carImage->getId());
+    }
+
+    #[Route('/revert', name: 'app_car_image_revert', methods: ['DELETE'])]
+    public function revert(
+        Request $request,
+        CarImageRepository $carImageRepository,
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator,
+    ): JsonResponse {
+        $id = json_decode($request->getContent(), true);
+        $carImage = $carImageRepository->find($id);
+
+        $entityManager->remove($carImage);
+        $entityManager->flush();
+
+        return $this->json(['success' => $translator->trans('file.deleted')]);
     }
 
     #[Route('/{id}/remove', name: 'app_car_image_remove', methods: ['DELETE'])]

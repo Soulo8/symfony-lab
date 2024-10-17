@@ -46,12 +46,18 @@ export default class extends Controller {
                         onerror: null,
                         ondata: null,
                     },
-                    revert: (uniqueFileId, load, error) => {
-                        removeImage(uniqueFileId, error);
-                        load();
-                    },
+                    revert: '/car-image/revert',
                     remove: (source, load, error) => {
-                        removeImage(source, error);
+                        fetch('/car-image/' + source + '/remove', {
+                            method: 'DELETE',
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                error('Image deletion error');
+                            }
+                            return response.json();
+                        });
+
                         load();
                     },
                 },
@@ -63,17 +69,4 @@ export default class extends Controller {
             );
         }
     }
-}
-
-function removeImage(id, error)
-{
-    fetch('/car-image/' + id + '/remove', {
-        method: 'DELETE',
-    })
-    .then(response => {
-        if (!response.ok) {
-            error('Image deletion error');
-        }
-        return response.json();
-    });
 }
