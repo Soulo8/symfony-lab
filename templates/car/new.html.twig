@@ -5,7 +5,7 @@
 {% block content %}
     <h1>{{ 'car.new'|trans }}</h1>
 
-    <div {{ stimulus_controller('car', {'route': 'new'}) }}>
+    <div {{ stimulus_controller('car', {'route': 'new', 'locale': app.request.locale}) }}>
         {{ include('car/_form.html.twig') }}
     </div>
 {% endblock %}
