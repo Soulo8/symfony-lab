@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dto\CarSearch;
 use App\Entity\Car;
 use App\Entity\CarImage;
+use App\Form\CarSearchType;
 use App\Form\CarType;
 use App\Service\CarImageManager;
 use App\Service\CarSearchManager;
@@ -56,7 +58,10 @@ final class CarController extends AbstractController
             ]
         );
 
-        $formSearch = $carSearchManager->buildForm();
+        $formSearch = $this->createForm(
+            CarSearchType::class,
+            new CarSearch()
+        );
         $formSearch->handleRequest($request);
 
         return $this->render('car/index.html.twig', [

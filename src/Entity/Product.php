@@ -92,13 +92,15 @@ class Product
         return $this;
     }
 
-    public function setImageFile(?File $imageFile = null): void
+    public function setImageFile(?File $imageFile = null): static
     {
         $this->imageFile = $imageFile;
 
         if (null !== $imageFile) {
             $this->setUpdatedAt(new \DateTime());
         }
+
+        return $this;
     }
 
     public function getImageFile(): ?File
@@ -106,9 +108,11 @@ class Product
         return $this->imageFile;
     }
 
-    public function setImageName(?string $imageName): void
+    public function setImageName(?string $imageName): static
     {
         $this->imageName = $imageName;
+
+        return $this;
     }
 
     public function getImageName(): ?string
@@ -116,9 +120,11 @@ class Product
         return $this->imageName;
     }
 
-    public function setImageSize(?int $imageSize): void
+    public function setImageSize(?int $imageSize): static
     {
         $this->imageSize = $imageSize;
+
+        return $this;
     }
 
     public function getImageSize(): ?int
