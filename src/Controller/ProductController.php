@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Dto\ProductSearch;
 use App\Entity\Product;
 use App\Entity\ProductImage;
+use App\Form\ProductSearchType;
 use App\Form\ProductType;
 use App\Service\ProductImageManager;
 use App\Service\ProductSearchManager;
@@ -62,7 +64,10 @@ final class ProductController extends AbstractController
             ]
         );
 
-        $formSearch = $productSearchManager->buildForm();
+        $formSearch = $this->createForm(
+            ProductSearchType::class,
+            new ProductSearch()
+        );
         $formSearch->handleRequest($request);
 
         return $this->render('product/index.html.twig', [
