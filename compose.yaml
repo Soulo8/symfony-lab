@@ -1,5 +1,5 @@
 services:
-  web:
+  php:
     build: .
     working_dir: /app
     volumes:
