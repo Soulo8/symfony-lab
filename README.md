@@ -20,8 +20,9 @@ Vous pouvez le faire via Docker Desktop ou avec les commandes :
 
 # Créer la base de données de test
 
-- `php bin/console --env=test doctrine:database:create`
-- `php bin/console --env=test doctrine:schema:create`
+La base de données de test est créée lors de la création du conteneur Docker de la base de données. Si vous avez supprimé la base de données de test, vous pouvez la créer avec `php bin/console --env=test doctrine:database:create`.
+
+Une fois la base de données créée, faites la commande `php bin/console --env=test doctrine:schema:create`.
 
 # Commandes
 
