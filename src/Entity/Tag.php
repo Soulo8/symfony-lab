@@ -8,8 +8,14 @@ use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
+#[Gedmo\SoftDeleteable(
+    fieldName: 'deletedAt',
+    timeAware: false,
+    hardDelete: true
+)]
 class Tag
 {
     #[ORM\Id]
@@ -123,6 +129,18 @@ class Tag
         if ($this->products->removeElement($product)) {
             $product->removeTag($this);
         }
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }
