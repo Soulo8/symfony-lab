@@ -4,12 +4,57 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\RestoreTag;
 use App\Repository\TagRepository;
+use App\State\TagsDeletedListProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new GetCollection(
+            name: 'tags_deleted',
+            uriTemplate: '/tags/deleted',
+            provider: TagsDeletedListProvider::class
+        ),
+        new Post(
+            validationContext: ['groups' => ['createOrUpdate']]
+        ),
+        new Get(),
+        new Delete(),
+        new Patch(
+            validationContext: ['groups' => ['createOrUpdate']]
+        ),
+        new Patch(
+            name: 'restore',
+            uriTemplate: '/tags/{id}/restore',
+            controller: RestoreTag::class,
+            provider: TagsDeletedListProvider::class,
+            denormalizationContext: ['groups' => []]
+        ),
+    ],
+    normalizationContext: ['groups' => ['tag:read']],
+    denormalizationContext: ['groups' => ['tag:write']],
+)]
+#[Gedmo\SoftDeleteable(
+    fieldName: 'deletedAt',
+    timeAware: false,
+    hardDelete: true
+)]
 class Tag
 {
     #[ORM\Id]
@@ -18,15 +63,21 @@ class Tag
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(groups: ['createOrUpdate'])]
+    #[Groups(['tag:read', 'tag:write'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childrens')]
+    #[Groups(['tag:read', 'tag:write'])]
+    #[MaxDepth(1)]
     private ?self $parent = null;
 
     /**
      * @var Collection<int, self>
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[Groups(['tag:read'])]
+    #[MaxDepth(1)]
     private Collection $childrens;
 
     /**
@@ -35,10 +86,24 @@ class Tag
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'tags')]
     private Collection $products;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['tag:read'])]
+    private ?\DateTime $deletedAt;
+
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
         $this->products = new ArrayCollection();
+    }
+
+    #[Assert\IsTrue(message: 'tag.one_level', groups: ['createOrUpdate'])]
+    public function isParentHasNotParent(): bool
+    {
+        if (null === $this->parent) {
+            return true;
+        }
+
+        return null === $this->parent->getParent();
     }
 
     public function getId(): ?int
@@ -123,6 +188,18 @@ class Tag
         if ($this->products->removeElement($product)) {
             $product->removeTag($this);
         }
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTime $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }

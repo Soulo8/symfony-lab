@@ -14,10 +14,14 @@ Vous pouvez le faire via Docker Desktop ou avec les commandes :
 - Dans le conteneur du projet faire les commandes :
     - `composer install`.
     - `php bin/console doctrine:migrations:migrate`
-    - `php bin/console --env=test doctrine:schema:create`
     - `php bin/console doctrine:fixtures:load --group=dev`
     - `npm install`
     - `php bin/console tailwind:build`
+
+# Créer la base de données de test
+
+- `php bin/console --env=test doctrine:database:create`
+- `php bin/console --env=test doctrine:schema:create`
 
 # Commandes
 

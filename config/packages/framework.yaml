@@ -11,6 +11,10 @@ framework:
 
     http_method_override: true
 
+    serializer:
+        default_context:
+            enable_max_depth: true
+
 when@test:
     framework:
         test: true
