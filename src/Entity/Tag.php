@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -49,6 +51,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['tag:read']],
     denormalizationContext: ['groups' => ['tag:write']],
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: ['id', 'name'],
+    arguments: ['orderParameterName' => 'order'],
 )]
 #[Gedmo\SoftDeleteable(
     fieldName: 'deletedAt',
