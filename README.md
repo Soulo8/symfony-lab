@@ -5,12 +5,18 @@
 # Se connecter avec le terminal aux conteneurs
 
 Vous pouvez le faire via Docker Desktop ou avec les commandes :
-- `make sh` ou `docker compose exec web zsh`
+- `make sh` ou `docker compose exec web sh`
 - `docker compose exec database sh`
+
+# Configuration Docker
+
+https://github.com/dunglas/symfony-docker/tree/main
 
 # Installer le projet
 
-- À la racine du projet, faire la commande `docker compose up` pour créer les conteneurs du projet. Par la suite, vous pourrez démarrer les conteneurs via l'interface graphique de Docker Desktop.
+- Dans le dossier du projet faire les commandes :
+    - `docker compose build --pull --no-cache`
+    - `docker compose up --wait` ou démarrer les conteneurs via l'interface graphique de Docker Desktop.
 - Dans le conteneur du projet faire les commandes :
     - `composer install`.
     - `php bin/console doctrine:migrations:migrate`
