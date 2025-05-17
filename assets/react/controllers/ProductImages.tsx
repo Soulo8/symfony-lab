@@ -10,6 +10,7 @@ interface ItemType {
 }
 
 interface ImageProps {
+    key: number;
     index: number;
     name: string;
     url: string;
