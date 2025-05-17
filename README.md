@@ -2,7 +2,7 @@
 
 - Docker (Docker Desktop)
 
-# Se connecter avec le terminal aux conteneurs
+# Entrer dans un conteneur le terminal
 
 Vous pouvez le faire via Docker Desktop ou avec les commandes :
 - `make sh` ou `docker compose exec web sh`
@@ -26,9 +26,24 @@ https://github.com/dunglas/symfony-docker/tree/main
 
 # Créer la base de données de test
 
-La base de données de test est créée lors de la création du conteneur Docker de la base de données. Si vous avez supprimé la base de données de test, vous pouvez la créer avec `php bin/console --env=test doctrine:database:create`.
+Le mot de passe root est généré aléatoirement lors de la commande `docker compose up --wait` et lorsque le volume de la base de données est créé. Pour le récupérer, allez dans les logs du conteneur de la base de données.
 
-Une fois la base de données créée, faites la commande `php bin/console --env=test doctrine:schema:create`.
+Si vous avez perdu le mot de passe root, supprimez le volume de base de données et refaites l'étape précédente.
+
+Ensuite allez dans le conteneur de la base de données puis faire la commande :
+
+```
+mariadb --user=root -p <<-EOSQL
+    CREATE DATABASE IF NOT EXISTS app_test;
+    GRANT ALL PRIVILEGES ON \`app_test%\`.* TO 'user'@'%';
+EOSQL
+```
+
+Dans le conteneur php faire la commande : `php bin/console --env=test doctrine:schema:create`
+
+# Lancer les tests
+
+Dans le projet faire la commande `make test`.
 
 # Commandes
 
