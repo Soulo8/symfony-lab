@@ -11,6 +11,8 @@ FROM dunglas/frankenphp:1-php8.3 AS frankenphp_upstream
 # Base FrankenPHP image
 FROM frankenphp_upstream AS frankenphp_base
 
+ARG NODE_VERSION=22
+
 WORKDIR /app
 
 VOLUME /app/var/
@@ -22,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	file \
 	gettext \
 	git \
+	gnupg \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
@@ -32,6 +35,17 @@ RUN set -eux; \
 		opcache \
 		zip \
 	;
+
+# Installing Node.js
+RUN mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_VERSION.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# End of Node.js installation
 
 ###> doctrine/doctrine-bundle ###
 RUN install-php-extensions pdo_mysql
