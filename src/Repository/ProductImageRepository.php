@@ -8,6 +8,9 @@ use App\Entity\ProductImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
+/**
+ * @extends SortableRepository<ProductImage>
+ */
 final class ProductImageRepository extends SortableRepository
 {
     public function __construct(EntityManagerInterface $em)

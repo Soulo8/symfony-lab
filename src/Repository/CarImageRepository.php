@@ -8,6 +8,9 @@ use App\Entity\CarImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
+/**
+ * @extends SortableRepository<CarImage>
+ */
 final class CarImageRepository extends SortableRepository
 {
     public function __construct(EntityManagerInterface $em)
