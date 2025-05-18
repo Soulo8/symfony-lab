@@ -279,11 +279,11 @@ final class ProductController extends AbstractController
         methods: ['GET']
     )]
     public function downloadImage(
-        Product $product,
+        ProductImage $image,
         DownloadHandler $downloadHandler,
     ): Response {
         return $downloadHandler->downloadObject(
-            $product,
+            $image,
             $fileField = 'imageFile'
         );
     }
