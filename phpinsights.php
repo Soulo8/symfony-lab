@@ -65,6 +65,7 @@ return [
     'remove' => [
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
         SlevomatCodingStandard\Sniffs\ControlStructures\DisallowYodaComparisonSniff::class,
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenSecurityIssues::class,
     ],
 
     'config' => [
