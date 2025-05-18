@@ -20,11 +20,11 @@ Si vous avez perdu le mot de passe root, supprimez le volume de base de données
 
 # Installer le projet
 
-- Dans le dossier du projet faire les commandes :
+- Dans le dossier du projet, faire les commandes :
     - `docker compose build --pull --no-cache`
     - `docker compose up --wait` ou démarrer les conteneurs via l'interface graphique de Docker Desktop.
-- Dans le conteneur du projet faire les commandes :
-    - Inutile de faire les commandes `composer install` et `php bin/console doctrine:migrations:migrate`, car elles sont lancer lors de la commande `docker compose up --wait`.
+- Dans le conteneur du projet, faire les commandes :
+    - Inutile de faire les commandes `composer install` et `php bin/console doctrine:migrations:migrate`, car elles sont lancées lors de la commande `docker compose up --wait`.
     - Optionnel : `php bin/console doctrine:fixtures:load --group=dev`
     - `npm install`
     - `php bin/console tailwind:build`
@@ -36,7 +36,7 @@ Si vous avez perdu le mot de passe root, supprimez le volume de base de données
 
 # Lancer les tests
 
-Dans le projet faire la commande `make test`.
+Dans le projet, faire la commande `make test`.
 
 # Commandes
 
