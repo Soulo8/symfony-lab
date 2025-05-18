@@ -16,7 +16,7 @@ https://github.com/dunglas/symfony-docker/tree/main
 
 Le mot de passe root est généré aléatoirement lors de la commande `docker compose up --wait` et lorsque le volume de la base de données est créé. Pour le récupérer, allez dans les logs du conteneur de la base de données.
 
-Si vous avez perdu le mot de passe root, supprimez le volume de base de données (LES DONNÉES QUE CONTIENT LA BASE DE DONNÉES SERONT SUPPRIMÉES) et refaites l'étape précédente.
+Si vous avez perdu le mot de passe root, supprimez le volume de base de données (LES DONNÉES QUE CONTIENT LA BASE DE DONNÉES SERONT SUPPRIMÉES) et refaire la commande `docker compose up --wait`.
 
 # Installer le projet
 
@@ -24,9 +24,8 @@ Si vous avez perdu le mot de passe root, supprimez le volume de base de données
     - `docker compose build --pull --no-cache`
     - `docker compose up --wait` ou démarrer les conteneurs via l'interface graphique de Docker Desktop.
 - Dans le conteneur du projet faire les commandes :
-    - Inutile de faire `composer install` car il est fait lors de la commande `docker compose build --pull --no-cache`
-    - `php bin/console doctrine:migrations:migrate`
-    - `php bin/console doctrine:fixtures:load --group=dev`
+    - Inutile de faire les commandes `composer install` et `php bin/console doctrine:migrations:migrate`, car elles sont lancer lors de la commande `docker compose up --wait`.
+    - Optionnel : `php bin/console doctrine:fixtures:load --group=dev`
     - `npm install`
     - `php bin/console tailwind:build`
 
