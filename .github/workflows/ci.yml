@@ -39,6 +39,39 @@ jobs:
         name: Start services
         run: docker compose up --wait --no-build
       -
+        name: Lint YAML files
+        run: docker compose exec -T php ./bin/console lint:yaml config --parse-tags
+      -
+        name: Lint Twig templates
+        run: docker compose exec -T php ./bin/console lint:twig templates --env=prod
+      -
+        name: Lint XLIFF translations
+        run: docker compose exec -T php ./bin/console lint:xliff translations
+      -
+        name: Lint Parameters and Services
+        run: docker compose exec -T php ./bin/console lint:container --no-debug
+      -
+        name: Lint Composer config
+        run: docker compose exec -T php composer validate --strict
+      -
+        name: Run PHP-CS-Fixer
+        run: docker compose exec -T php ./vendor/bin/php-cs-fixer fix --dry-run
+      -
+        name: Run PHPStan
+        run: docker compose exec -T php ./vendor/bin/phpstan analyze
+      -
+        name: Run PHP Insights
+        run: docker compose exec -T php ./vendor/bin/phpinsights
+      -
+        name: Install Importmap
+        run: docker compose exec -T php bin/console importmap:install
+      -
+        name: Install dependencies JavaScript
+        run: npm ci
+      -
+        name: Tailwind CSS compilation
+        run: docker compose exec -T php bin/console tailwind:build
+      -
         name: Check HTTP reachability
         run: curl -v --fail-with-body http://localhost
       -
