@@ -12,7 +12,7 @@ Vous pouvez le faire via Docker Desktop ou avec les commandes :
 
 https://github.com/dunglas/symfony-docker/tree/main
 
-# Récupérer le mot de passe root
+# Récupérer le mot de passe de l'utilisateur root de MariaDB
 
 Le mot de passe root est généré aléatoirement lors de la commande `docker compose up --wait` et lorsque le volume de la base de données est créé. Pour le récupérer, allez dans les logs du conteneur de la base de données.
 
