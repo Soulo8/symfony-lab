@@ -5,8 +5,8 @@
 # Entrer dans un conteneur le terminal
 
 Vous pouvez le faire via Docker Desktop ou avec les commandes :
-- `make sh` ou `docker compose exec web sh`
-- `docker compose exec database sh`
+- `make sh` ou `docker compose exec php bash`
+- `docker compose exec database bash`
 
 # Configuration Docker
 

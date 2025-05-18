@@ -1,5 +1,5 @@
 sh:
-	docker compose exec php sh
+	docker compose exec php bash
 
 php-cs-fixer:
 	docker compose exec php ./vendor/bin/php-cs-fixer fix
