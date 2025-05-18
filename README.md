@@ -12,6 +12,12 @@ Vous pouvez le faire via Docker Desktop ou avec les commandes :
 
 https://github.com/dunglas/symfony-docker/tree/main
 
+# Récupérer le mot de passe root
+
+Le mot de passe root est généré aléatoirement lors de la commande `docker compose up --wait` et lorsque le volume de la base de données est créé. Pour le récupérer, allez dans les logs du conteneur de la base de données.
+
+Si vous avez perdu le mot de passe root, supprimez le volume de base de données (LES DONNÉES QUE CONTIENT LA BASE DE DONNÉES SERONT SUPPRIMÉES) et refaites l'étape précédente.
+
 # Installer le projet
 
 - Dans le dossier du projet faire les commandes :
@@ -26,20 +32,8 @@ https://github.com/dunglas/symfony-docker/tree/main
 
 # Créer la base de données de test
 
-Le mot de passe root est généré aléatoirement lors de la commande `docker compose up --wait` et lorsque le volume de la base de données est créé. Pour le récupérer, allez dans les logs du conteneur de la base de données.
-
-Si vous avez perdu le mot de passe root, supprimez le volume de base de données et refaites l'étape précédente.
-
-Ensuite allez dans le conteneur de la base de données puis faire la commande :
-
-```
-mariadb --user=root -p <<-EOSQL
-    CREATE DATABASE IF NOT EXISTS app_test;
-    GRANT ALL PRIVILEGES ON \`app_test%\`.* TO 'user'@'%';
-EOSQL
-```
-
-Dans le conteneur php faire la commande : `php bin/console --env=test doctrine:schema:create`
+- `php bin/console --env=test doctrine:database:create`
+- `php bin/console --env=test doctrine:schema:create`
 
 # Lancer les tests
 
