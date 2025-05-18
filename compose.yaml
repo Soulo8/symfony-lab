@@ -59,6 +59,7 @@ services:
       start_period: 60s
     volumes:
       - database_data:/var/lib/mysql:rw
+      - './mariadb/grant-testing-database.sql:/docker-entrypoint-initdb.d/10-grant-testing-database.sql'
 ###< doctrine/doctrine-bundle ###
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
