@@ -2,15 +2,27 @@
 
 - Docker (Docker Desktop)
 
-# Se connecter avec le terminal aux conteneurs
+# Entrer dans un conteneur le terminal
 
 Vous pouvez le faire via Docker Desktop ou avec les commandes :
-- `make sh` ou `docker compose exec web zsh`
-- `docker compose exec database sh`
+- `make sh` ou `docker compose exec php bash`
+- `docker compose exec database bash`
+
+# Configuration Docker
+
+https://github.com/dunglas/symfony-docker/tree/main
+
+# Récupérer le mot de passe root
+
+Le mot de passe root est généré aléatoirement lors de la commande `docker compose up --wait` et lorsque le volume de la base de données est créé. Pour le récupérer, allez dans les logs du conteneur de la base de données.
+
+Si vous avez perdu le mot de passe root, supprimez le volume de base de données (LES DONNÉES QUE CONTIENT LA BASE DE DONNÉES SERONT SUPPRIMÉES) et refaites l'étape précédente.
 
 # Installer le projet
 
-- À la racine du projet, faire la commande `docker compose up` pour créer les conteneurs du projet. Par la suite, vous pourrez démarrer les conteneurs via l'interface graphique de Docker Desktop.
+- Dans le dossier du projet faire les commandes :
+    - `docker compose build --pull --no-cache`
+    - `docker compose up --wait` ou démarrer les conteneurs via l'interface graphique de Docker Desktop.
 - Dans le conteneur du projet faire les commandes :
     - `composer install`.
     - `php bin/console doctrine:migrations:migrate`
@@ -20,9 +32,12 @@ Vous pouvez le faire via Docker Desktop ou avec les commandes :
 
 # Créer la base de données de test
 
-La base de données de test est créée lors de la création du conteneur Docker de la base de données. Si vous avez supprimé la base de données de test, vous pouvez la créer avec `php bin/console --env=test doctrine:database:create`.
+- `php bin/console --env=test doctrine:database:create`
+- `php bin/console --env=test doctrine:schema:create`
 
-Une fois la base de données créée, faites la commande `php bin/console --env=test doctrine:schema:create`.
+# Lancer les tests
+
+Dans le projet faire la commande `make test`.
 
 # Commandes
 

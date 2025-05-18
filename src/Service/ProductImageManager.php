@@ -6,12 +6,12 @@ namespace App\Service;
 
 use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Request;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ProductImageManager
 {
     public function __construct(
-        private UploaderHelper $uploaderHelper,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
@@ -26,7 +26,7 @@ final class ProductImageManager
             $data[] = [
                 'index' => $key,
                 'name' => $image->getImageName(),
-                'url' => $this->uploaderHelper->asset($image, 'imageFile'),
+                'url' => $this->urlGenerator->generate('app_product_image', ['id' => $image->getId()]),
             ];
         }
 

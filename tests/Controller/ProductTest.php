@@ -115,11 +115,16 @@ class ProductTest extends WebTestCase
     {
         $path = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Bird->value);
 
-        $product = ProductFactory::createOne([
+        $image2 = ProductImageFactory::createOne([
             'imageFile' => $this->imageManager->createTemporyAndUploadedFile($path),
         ]);
 
-        $this->client->request('GET', sprintf('/product/download-image/%s', $product->getId()));
+        ProductFactory::createOne([
+            'imageFile' => $this->imageManager->createTemporyAndUploadedFile($path),
+            'images' => [$image2],
+        ]);
+
+        $this->client->request('GET', sprintf('/product/download-image/%s', $image2->getId()));
 
         self::assertResponseStatusCodeSame(200);
     }
