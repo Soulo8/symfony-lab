@@ -2,7 +2,7 @@
 
 - Docker (Docker Desktop)
 
-# Entrer dans un conteneur le terminal
+# Entrer dans un conteneur avec le terminal
 
 Vous pouvez le faire via Docker Desktop ou avec les commandes :
 - `make sh` ou `docker compose exec php bash`
@@ -24,7 +24,7 @@ Si vous avez perdu le mot de passe root, supprimez le volume de base de données
     - `docker compose build --pull --no-cache`
     - `docker compose up --wait` ou démarrer les conteneurs via l'interface graphique de Docker Desktop.
 - Dans le conteneur du projet faire les commandes :
-    - `composer install`.
+    - Inutile de faire `composer install` car il est fait lors de la commande `docker compose build --pull --no-cache`
     - `php bin/console doctrine:migrations:migrate`
     - `php bin/console doctrine:fixtures:load --group=dev`
     - `npm install`
