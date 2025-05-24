@@ -17,7 +17,10 @@ final class CarFactory extends PersistentProxyObjectFactory
         return Car::class;
     }
 
-    protected function defaults(): array|callable
+    /**
+     * @return array<string, \DateTime|string>
+     */
+    protected function defaults(): array
     {
         return [
             'createdAt' => self::faker()->dateTime(),
