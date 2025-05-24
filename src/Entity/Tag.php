@@ -72,7 +72,7 @@ class Tag
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(groups: ['createOrUpdate'])]
     #[Groups(['tag:read', 'tag:write'])]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childrens')]
     #[Groups(['tag:read', 'tag:write'])]
@@ -118,7 +118,7 @@ class Tag
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

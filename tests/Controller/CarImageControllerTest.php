@@ -6,50 +6,50 @@ use App\Enum\Image;
 use App\Factory\CarFactory;
 use App\Factory\CarImageFactory;
 use App\Service\ImageManager;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CarImageControllerTest extends WebTestCase
 {
     use Factories;
-
-    private ImageManager $imageManager;
-    private KernelBrowser $client;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-        $this->imageManager = static::getContainer()->get(ImageManager::class);
-    }
+    use ResetDatabase;
 
     public function testDownload(): void
     {
+        $client = static::createClient();
+
+        $imageManager = static::getContainer()->get(ImageManager::class);
+
         $path = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Bird->value);
 
         $carImage = CarImageFactory::createOne([
-            'imageFile' => $this->imageManager->createTemporyAndUploadedFile($path),
+            'imageFile' => $imageManager->createTemporyAndUploadedFile($path),
         ]);
 
-        $this->client->request('GET', sprintf('/car-image/download/%s', $carImage->getId()));
+        $client->request('GET', sprintf('/car-image/download/%s', $carImage->getId()));
 
         self::assertResponseStatusCodeSame(200);
     }
 
     public function testProcess(): void
     {
+        $client = static::createClient();
+
+        $imageManager = static::getContainer()->get(ImageManager::class);
+
         $car = CarFactory::createOne();
 
         $path = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Bird->value);
 
-        $this->client->request(
+        $client->request(
             'POST',
             sprintf('/car-image/process/car/%s', $car->getId()),
             [],
             [
                 'car' => [
                     'images' => [
-                        $this->imageManager->createTemporyAndUploadedFile($path),
+                        $imageManager->createTemporyAndUploadedFile($path),
                     ],
                 ],
             ],
@@ -61,9 +61,11 @@ class CarImageControllerTest extends WebTestCase
 
     public function testRevert(): void
     {
+        $client = static::createClient();
+
         $carImage = CarImageFactory::createOne();
 
-        $this->client->request(
+        $client->request(
             'DELETE',
             '/car-image/revert',
             [],
@@ -77,9 +79,11 @@ class CarImageControllerTest extends WebTestCase
 
     public function testRemove(): void
     {
+        $client = static::createClient();
+
         $carImage = CarImageFactory::createOne();
 
-        $this->client->request('DELETE', sprintf('/car-image/%s/remove', $carImage->getId()));
+        $client->request('DELETE', sprintf('/car-image/%s/remove', $carImage->getId()));
 
         CarImageFactory::assert()->notExists(['id' => $carImage->getId()]);
     }

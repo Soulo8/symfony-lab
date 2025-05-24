@@ -2,31 +2,24 @@
 
 namespace App\Tests\Api;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Tag;
 use App\Factory\TagFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-class TagsTest extends ApiTestCase
+class TagsTest extends AbstractTest
 {
     use Factories;
-
-    private EntityManagerInterface $entityManager;
-    private HttpClientInterface $client;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
-    }
+    use ResetDatabase;
 
     public function testGetCollection(): void
     {
+        $client = static::createClient();
+
         TagFactory::createMany(2);
 
-        $response = $this->client->request('GET', '/api/tags');
+        $client->request('GET', '/api/tags');
 
         self::assertResponseStatusCodeSame(200);
         self::assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -35,7 +28,9 @@ class TagsTest extends ApiTestCase
 
     public function testCreateTag(): void
     {
-        $response = $this->client->request('POST', '/api/tags', [
+        $client = static::createClient();
+
+        $response = $client->request('POST', '/api/tags', [
             'json' => [
                 'name' => 'New tag',
             ],
@@ -53,11 +48,13 @@ class TagsTest extends ApiTestCase
 
     public function testCreateInvalidTag(): void
     {
+        $client = static::createClient();
+
         $tagWithParent = TagFactory::createOne([
             'parent' => TagFactory::createOne(),
         ]);
 
-        $response = $this->client->request('POST', '/api/tags', [
+        $client->request('POST', '/api/tags', [
             'json' => [
                 'name' => 'New tag',
                 'parent' => sprintf('%s%s', '/api/tags/', $tagWithParent->getId()),
@@ -72,9 +69,11 @@ class TagsTest extends ApiTestCase
 
     public function testGetCollectionDeleted(): void
     {
+        $client = static::createClient();
+
         TagFactory::createMany(2, ['deletedAt' => new \DateTime()]);
 
-        $response = $this->client->request('GET', '/api/tags/deleted');
+        $response = $client->request('GET', '/api/tags/deleted');
 
         self::assertResponseStatusCodeSame(200);
         self::assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -84,11 +83,13 @@ class TagsTest extends ApiTestCase
 
     public function testUpdateTag(): void
     {
+        $client = static::createClient();
+
         TagFactory::createOne(['name' => 'A tag']);
 
         $iri = $this->findIriBy(Tag::class, ['name' => 'A tag']);
 
-        $this->client->request('PATCH', $iri, [
+        $client->request('PATCH', $iri, [
             'json' => [
                 'name' => 'Update tag',
             ],
@@ -103,14 +104,18 @@ class TagsTest extends ApiTestCase
 
     public function testRestoreTag(): void
     {
+        $client = static::createClient();
+
+        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
         $deletedAt = new \DateTime();
         TagFactory::createOne(['name' => 'A tag', 'deletedAt' => $deletedAt]);
 
-        $this->entityManager->getFilters()->disable('softdeleteable');
+        $entityManager->getFilters()->disable('softdeleteable');
         $iri = $this->findIriBy(Tag::class, ['name' => 'A tag']);
-        $this->entityManager->getFilters()->enable('softdeleteable');
+        $entityManager->getFilters()->enable('softdeleteable');
 
-        $this->client->request('PATCH', sprintf('%s%s', $iri, '/restore'), [
+        $client->request('PATCH', sprintf('%s%s', $iri, '/restore'), [
             'json' => [],
             'headers' => [
                 'Content-Type' => 'application/merge-patch+json',
@@ -123,11 +128,13 @@ class TagsTest extends ApiTestCase
 
     public function testDeleteTag(): void
     {
+        $client = static::createClient();
+
         TagFactory::createOne(['name' => 'A tag']);
 
         $iri = $this->findIriBy(Tag::class, ['name' => 'A tag']);
 
-        $this->client->request('DELETE', $iri);
+        $client->request('DELETE', $iri);
 
         self::assertResponseStatusCodeSame(204);
         TagFactory::assert()->notExists(['name' => 'A tag', 'deletedAt' => null]);
