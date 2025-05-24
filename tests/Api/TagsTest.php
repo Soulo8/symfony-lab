@@ -10,7 +10,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TagsTest extends AbstractTest
 {
-    use Factories, ResetDatabase;
+    use Factories;
+    use ResetDatabase;
 
     public function testGetCollection(): void
     {

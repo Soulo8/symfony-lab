@@ -10,7 +10,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CarControllerTest extends WebTestCase
 {
-    use Factories, ResetDatabase;
+    use Factories;
+    use ResetDatabase;
 
     public function testIndex(): void
     {

@@ -19,7 +19,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ProductTest extends WebTestCase
 {
-    use Factories, ResetDatabase;
+    use Factories;
+    use ResetDatabase;
 
     public function testIndex(): void
     {
@@ -36,7 +37,7 @@ class ProductTest extends WebTestCase
     public function testNew(): void
     {
         $client = static::createClient();
-        
+
         $crawler = $client->request('GET', '/product/new');
 
         self::assertResponseStatusCodeSame(200);
