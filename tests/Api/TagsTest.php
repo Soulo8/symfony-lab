@@ -2,14 +2,13 @@
 
 namespace App\Tests\Api;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Tag;
 use App\Factory\TagFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class TagsTest extends ApiTestCase
+class TagsTest extends AbstractTest
 {
     use Factories, ResetDatabase;
 
