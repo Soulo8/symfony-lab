@@ -43,7 +43,7 @@ class CarImage
 
     #[Gedmo\SortablePosition]
     #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $position = null;
+    private int $position;
 
     public function getId(): ?int
     {
@@ -102,7 +102,7 @@ class CarImage
         return $this;
     }
 
-    public function getPosition(): ?int
+    public function getPosition(): int
     {
         return $this->position;
     }
