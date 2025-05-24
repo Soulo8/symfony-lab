@@ -8,7 +8,6 @@ use App\Factory\ProductFactory;
 use App\Factory\ProductImageFactory;
 use App\Factory\TagFactory;
 use App\Service\ImageManager;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,34 +15,29 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ProductTest extends WebTestCase
 {
-    use Factories;
-
-    private ImageManager $imageManager;
-    private KernelBrowser $client;
-    private TranslatorInterface $translator;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-        $container = static::getContainer();
-        $this->imageManager = $container->get(ImageManager::class);
-        $this->translator = $container->get(TranslatorInterface::class);
-    }
+    use Factories, ResetDatabase;
 
     public function testIndex(): void
     {
-        $this->client->request('GET', '/product');
+        $client = static::createClient();
+
+        $translator = static::getContainer()->get(TranslatorInterface::class);
+
+        $client->request('GET', '/product');
 
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains($this->translator->trans('products'));
+        self::assertPageTitleContains($translator->trans('products'));
     }
 
     public function testNew(): void
     {
-        $crawler = $this->client->request('GET', '/product/new');
+        $client = static::createClient();
+        
+        $crawler = $client->request('GET', '/product/new');
 
         self::assertResponseStatusCodeSame(200);
 
@@ -65,7 +59,7 @@ class ProductTest extends WebTestCase
         $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
         $uploadedFile = new UploadedFile($filePath, 'landscape.jpg', 'image/jpeg', null);
 
-        $this->client->submit($form, [
+        $client->submit($form, [
             'product[name]' => 'Testing',
             'product[tags]' => [$tag->getId()],
             'product[imageFile][file]' => $uploadedFile,
@@ -79,6 +73,8 @@ class ProductTest extends WebTestCase
 
     public function testEdit(): void
     {
+        $client = static::createClient();
+
         $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
 
         $product = ProductFactory::createOne([
@@ -86,11 +82,11 @@ class ProductTest extends WebTestCase
             'images' => [ProductImageFactory::createOne(['imageFile' => new File($filePath)])],
         ]);
 
-        $this->client->request('GET', sprintf('/product/%s/edit', $product->getId()));
+        $client->request('GET', sprintf('/product/%s/edit', $product->getId()));
 
         self::assertResponseStatusCodeSame(200);
 
-        $this->client->submitForm('save', [
+        $client->submitForm('save', [
             'product[name]' => 'Something New',
             'product[newImages][0]' => $product->getImages()->first()->getImageFile(),
         ]);
@@ -102,10 +98,12 @@ class ProductTest extends WebTestCase
 
     public function testDelete(): void
     {
+        $client = static::createClient();
+
         $product = ProductFactory::createOne();
 
-        $this->client->request('GET', sprintf('/product/%s/edit', $product->getId()));
-        $this->client->submitForm('delete');
+        $client->request('GET', sprintf('/product/%s/edit', $product->getId()));
+        $client->submitForm('delete');
 
         self::assertResponseRedirects('/product', 303);
         ProductFactory::assert()->notExists(['id' => $product->getId()]);
@@ -113,18 +111,22 @@ class ProductTest extends WebTestCase
 
     public function testDownloadImage(): void
     {
+        $client = static::createClient();
+
+        $imageManager = static::getContainer()->get(ImageManager::class);
+
         $path = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Bird->value);
 
         $image2 = ProductImageFactory::createOne([
-            'imageFile' => $this->imageManager->createTemporyAndUploadedFile($path),
+            'imageFile' => $imageManager->createTemporyAndUploadedFile($path),
         ]);
 
         ProductFactory::createOne([
-            'imageFile' => $this->imageManager->createTemporyAndUploadedFile($path),
+            'imageFile' => $imageManager->createTemporyAndUploadedFile($path),
             'images' => [$image2],
         ]);
 
-        $this->client->request('GET', sprintf('/product/download-image/%s', $image2->getId()));
+        $client->request('GET', sprintf('/product/download-image/%s', $image2->getId()));
 
         self::assertResponseStatusCodeSame(200);
     }

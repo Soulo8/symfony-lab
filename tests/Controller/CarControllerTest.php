@@ -3,39 +3,36 @@
 namespace App\Test\Controller;
 
 use App\Factory\CarFactory;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CarControllerTest extends WebTestCase
 {
-    use Factories;
-
-    private KernelBrowser $client;
-    private TranslatorInterface $translator;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-        $this->translator = static::getContainer()->get(TranslatorInterface::class);
-    }
+    use Factories, ResetDatabase;
 
     public function testIndex(): void
     {
-        $this->client->request('GET', '/car');
+        $client = static::createClient();
+
+        $translator = static::getContainer()->get(TranslatorInterface::class);
+
+        $client->request('GET', '/car');
 
         self::assertResponseStatusCodeSame(200);
-        self::assertPageTitleContains($this->translator->trans('cars'));
+        self::assertPageTitleContains($translator->trans('cars'));
     }
 
     public function testNew(): void
     {
-        $this->client->request('GET', '/car/new');
+        $client = static::createClient();
+
+        $client->request('GET', '/car/new');
 
         self::assertResponseStatusCodeSame(200);
 
-        $this->client->submitForm('save', [
+        $client->submitForm('save', [
             'car[name]' => 'Testing',
         ]);
 
@@ -46,11 +43,13 @@ class CarControllerTest extends WebTestCase
 
     public function testEdit(): void
     {
+        $client = static::createClient();
+
         $car = CarFactory::createOne();
 
-        $this->client->request('GET', sprintf('/car/%s/edit', $car->getId()));
+        $client->request('GET', sprintf('/car/%s/edit', $car->getId()));
 
-        $this->client->submitForm('save', [
+        $client->submitForm('save', [
             'car[name]' => 'Something New',
         ]);
 
@@ -61,10 +60,12 @@ class CarControllerTest extends WebTestCase
 
     public function testRemove(): void
     {
+        $client = static::createClient();
+
         $car = CarFactory::createOne();
 
-        $this->client->request('GET', sprintf('/car/%s/edit', $car->getId()));
-        $this->client->submitForm('delete');
+        $client->request('GET', sprintf('/car/%s/edit', $car->getId()));
+        $client->submitForm('delete');
 
         self::assertResponseRedirects('/car', 303);
         CarFactory::assert()->notExists(['id' => $car->getId()]);
