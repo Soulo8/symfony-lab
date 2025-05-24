@@ -12,7 +12,8 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CarImageControllerTest extends WebTestCase
 {
-    use Factories, ResetDatabase;
+    use Factories;
+    use ResetDatabase;
 
     public function testDownload(): void
     {
