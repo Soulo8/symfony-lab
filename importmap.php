@@ -58,10 +58,6 @@ return [
     'flowbite-datepicker' => [
         'version' => '1.3.2',
     ],
-    'flowbite/dist/flowbite.min.css' => [
-        'version' => '3.1.2',
-        'type' => 'css',
-    ],
     'tom-select' => [
         'version' => '2.4.3',
     ],
