@@ -16,14 +16,17 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
-    '@hotwired/stimulus' => [
-        'version' => '3.2.2',
-    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
+    '@symfony/ux-react' => [
+        'path' => './vendor/symfony/ux-react/assets/dist/loader.js',
+    ],
+    '@hotwired/stimulus' => [
+        'version' => '3.2.2',
+    ],
     '@hotwired/turbo' => [
-        'version' => '7.3.0',
+        'version' => '8.0.13',
     ],
     'react' => [
         'version' => '18.3.1',
@@ -32,45 +35,38 @@ return [
         'version' => '18.3.1',
     ],
     'scheduler' => [
-        'version' => '0.23.2',
-    ],
-    '@symfony/ux-react' => [
-        'path' => './vendor/symfony/ux-react/assets/dist/loader.js',
+        'version' => '0.26.0',
     ],
     'react-sortablejs' => [
         'version' => '6.1.4',
     ],
     'sortablejs' => [
-        'version' => '1.15.3',
+        'version' => '1.15.6',
     ],
     'classnames' => [
-        'version' => '2.3.1',
+        'version' => '2.5.1',
     ],
     'tiny-invariant' => [
-        'version' => '1.2.0',
+        'version' => '1.3.3',
     ],
     'flowbite' => [
-        'version' => '2.5.2',
+        'version' => '3.1.2',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
     ],
     'flowbite-datepicker' => [
-        'version' => '1.3.0',
-    ],
-    'flowbite/dist/flowbite.min.css' => [
-        'version' => '2.5.2',
-        'type' => 'css',
+        'version' => '1.3.2',
     ],
     'tom-select' => [
-        'version' => '2.3.1',
+        'version' => '2.4.3',
     ],
     'tom-select/dist/css/tom-select.default.css' => [
-        'version' => '2.3.1',
+        'version' => '2.4.3',
         'type' => 'css',
     ],
     'filepond' => [
-        'version' => '4.31.4',
+        'version' => '4.32.7',
     ],
     'filepond-plugin-image-preview' => [
         'version' => '4.6.12',
@@ -86,20 +82,30 @@ return [
         'type' => 'css',
     ],
     'filepond/dist/filepond.css' => [
-        'version' => '4.31.4',
+        'version' => '4.32.7',
         'type' => 'css',
     ],
     'filepond-plugin-file-encode' => [
         'version' => '2.1.14',
     ],
     'filepond-plugin-file-poster' => [
-        'version' => '2.5.1',
+        'version' => '2.5.2',
     ],
     'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css' => [
-        'version' => '2.5.1',
+        'version' => '2.5.2',
         'type' => 'css',
     ],
     'filepond/locale/fr-fr.js' => [
-        'version' => '4.31.4',
+        'version' => '4.32.7',
+    ],
+    '@orchidjs/sifter' => [
+        'version' => '1.1.0',
+    ],
+    '@orchidjs/unicode-variants' => [
+        'version' => '1.1.2',
+    ],
+    'tom-select/dist/css/tom-select.default.min.css' => [
+        'version' => '2.4.3',
+        'type' => 'css',
     ],
 ];
