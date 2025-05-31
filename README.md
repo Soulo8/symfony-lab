@@ -1,3 +1,5 @@
+Ce projet est une application web développée avec Symfony 7 et intégrant API Platform 4 et Tailwind CSS 4. Il inclut une gestion minimale de produits et de voitures, permettant des uploads d'images et utilisant un peu de React pour le tri de ces images. L’API a était développé pour une gestion de tag et est utilisée dans le projet `angular-lab`.
+
 # Prérequis
 
 - Docker (Docker Desktop)
