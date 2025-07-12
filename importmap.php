@@ -29,10 +29,10 @@ return [
         'version' => '8.0.13',
     ],
     'react' => [
-        'version' => '18.3.1',
+        'version' => '19.1.0',
     ],
     'react-dom' => [
-        'version' => '18.3.1',
+        'version' => '19.1.0',
     ],
     'scheduler' => [
         'version' => '0.26.0',
@@ -66,7 +66,7 @@ return [
         'type' => 'css',
     ],
     'filepond' => [
-        'version' => '4.32.7',
+        'version' => '4.32.8',
     ],
     'filepond-plugin-image-preview' => [
         'version' => '4.6.12',
@@ -82,7 +82,7 @@ return [
         'type' => 'css',
     ],
     'filepond/dist/filepond.css' => [
-        'version' => '4.32.7',
+        'version' => '4.32.8',
         'type' => 'css',
     ],
     'filepond-plugin-file-encode' => [
@@ -96,7 +96,7 @@ return [
         'type' => 'css',
     ],
     'filepond/locale/fr-fr.js' => [
-        'version' => '4.32.7',
+        'version' => '4.32.8',
     ],
     '@orchidjs/sifter' => [
         'version' => '1.1.0',
@@ -106,6 +106,10 @@ return [
     ],
     'tom-select/dist/css/tom-select.default.min.css' => [
         'version' => '2.4.3',
+        'type' => 'css',
+    ],
+    'flowbite/dist/flowbite.min.css' => [
+        'version' => '3.1.2',
         'type' => 'css',
     ],
 ];
