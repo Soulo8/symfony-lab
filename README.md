@@ -31,11 +31,6 @@ Si vous avez perdu le mot de passe root, supprimez le volume de base de données
     - `npm install`
     - `php bin/console tailwind:build`
 
-# Créer la base de données de test
-
-- `php bin/console --env=test doctrine:database:create`
-- `php bin/console --env=test doctrine:schema:create`
-
 # Lancer les tests
 
 Dans le projet, faire la commande `make test`.
