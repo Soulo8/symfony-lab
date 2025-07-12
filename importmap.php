@@ -29,10 +29,10 @@ return [
         'version' => '8.0.13',
     ],
     'react' => [
-        'version' => '19.1.0',
+        'version' => '18.3.1',
     ],
     'react-dom' => [
-        'version' => '19.1.0',
+        'version' => '18.3.1',
     ],
     'scheduler' => [
         'version' => '0.26.0',
