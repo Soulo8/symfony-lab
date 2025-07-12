@@ -13,6 +13,8 @@ class TagsTest extends AbstractTest
     use Factories;
     use ResetDatabase;
 
+    protected static ?bool $alwaysBootKernel = false;
+
     public function testGetCollection(): void
     {
         $client = static::createClient();

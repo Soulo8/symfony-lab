@@ -26,7 +26,7 @@ js-build:
 	docker compose exec php npm run build
 
 test:
-	docker compose exec php ./vendor/bin/phpunit
+	docker compose exec php bin/phpunit
 
 drop-test-db:
 	docker compose exec php php bin/console --env=test --force doctrine:database:drop
