@@ -17,7 +17,7 @@ interface ImageProps {
     onRemove: (index: number) => void;
 }
 
-const BasicFunction: FC = (props) => {
+const ProductImages: FC = (props) => {
     const [state, setState] = useState<ItemType[]>(props.images);
 
     const handleRemove = (index) => {
@@ -47,4 +47,4 @@ function Image({ index, name, url, onRemove }: ImageProps) {
     );
 }
 
-export default BasicFunction;
+export default ProductImages;
