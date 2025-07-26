@@ -12,8 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test-and-cs:
-    name: Tests and CS
+  tests-and-linters:
+    name: Tests and linters
     runs-on: ubuntu-latest
     steps:
       -
@@ -69,7 +69,7 @@ jobs:
         name: Install dependencies JavaScript
         run: npm ci
       -
-        name: Run Linter JavaScript
+        name: Run linter JavaScript
         run: npm run lint
       -
         name: Tailwind CSS compilation
