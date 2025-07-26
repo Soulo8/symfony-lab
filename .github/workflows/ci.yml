@@ -12,8 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  tests:
-    name: Tests
+  test-and-cs:
+    name: Tests and CS
     runs-on: ubuntu-latest
     steps:
       -
@@ -68,6 +68,9 @@ jobs:
       -
         name: Install dependencies JavaScript
         run: npm ci
+      -
+        name: Run Linter JavaScript
+        run: npm run lint
       -
         name: Tailwind CSS compilation
         run: docker compose exec -T php bin/console tailwind:build
