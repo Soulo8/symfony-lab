@@ -57,7 +57,7 @@ class TagsTest extends AbstractTest
         $client->request('POST', '/api/tags', [
             'json' => [
                 'name' => 'New tag',
-                'parent' => sprintf('%s%s', '/api/tags/', $tagWithParent->getId()),
+                'parent' => sprintf('%s%d', '/api/tags/', $tagWithParent->getId()),
             ],
             'headers' => [
                 'Content-Type' => 'application/ld+json',

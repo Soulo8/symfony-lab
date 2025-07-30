@@ -3,10 +3,12 @@
 namespace App\Test\Controller;
 
 use App\Enum\Image;
+use App\Enum\Path;
 use App\Factory\CarFactory;
 use App\Factory\CarImageFactory;
 use App\Service\ImageManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -27,7 +29,7 @@ class CarImageControllerTest extends WebTestCase
             'imageFile' => $imageManager->createTemporyAndUploadedFile($path),
         ]);
 
-        $client->request('GET', sprintf('/car-image/download/%s', $carImage->getId()));
+        $client->request('GET', sprintf('/car-image/download/%d', $carImage->getId()));
 
         self::assertResponseStatusCodeSame(200);
     }
@@ -44,7 +46,7 @@ class CarImageControllerTest extends WebTestCase
 
         $client->request(
             'POST',
-            sprintf('/car-image/process/car/%s', $car->getId()),
+            sprintf('/car-image/process/car/%d', $car->getId()),
             [],
             [
                 'car' => [
@@ -83,8 +85,27 @@ class CarImageControllerTest extends WebTestCase
 
         $carImage = CarImageFactory::createOne();
 
-        $client->request('DELETE', sprintf('/car-image/%s/remove', $carImage->getId()));
+        $client->request('DELETE', sprintf('/car-image/%d/remove', $carImage->getId()));
 
         CarImageFactory::assert()->notExists(['id' => $carImage->getId()]);
+    }
+
+    protected function tearDown(): void
+    {
+        $projectDir = self::$kernel->getProjectDir();
+
+        parent::tearDown();
+
+        $filesystem = new Filesystem();
+        $uploadDir = sprintf('%s%s%s', $projectDir, Path::FOLDER_UPLOADS_TEST->value, '/cars');
+
+        if ($filesystem->exists($uploadDir)) {
+            $files = glob($uploadDir.'/*');
+            foreach ($files as $file) {
+                if ('.gitignore' !== basename($file)) {
+                    $filesystem->remove($file);
+                }
+            }
+        }
     }
 }

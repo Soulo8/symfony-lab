@@ -104,8 +104,7 @@ final class CarController extends AbstractController
                         $tempPath,
                         $data['name'],
                         $data['type'],
-                        null,
-                        true
+                        null
                     );
 
                     $carImage = new CarImage();
