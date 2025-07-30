@@ -58,7 +58,7 @@ class ProductTest extends WebTestCase
         // dump($form->all());
 
         $filePath = sprintf('%s%s', self::$kernel->getProjectDir(), Image::Landscape->value);
-        $uploadedFile = new UploadedFile($filePath, 'landscape.jpg', 'image/jpeg', null);
+        $uploadedFile = new UploadedFile($filePath, 'landscape.jpg', 'image/jpeg', null, true);
 
         $client->submit($form, [
             'product[name]' => 'Testing',
@@ -139,7 +139,7 @@ class ProductTest extends WebTestCase
         parent::tearDown();
 
         $filesystem = new Filesystem();
-        $uploadDir = sprintf('%s%s', $projectDir, Path::FOLDER_UPLOADS_TEST->value);
+        $uploadDir = sprintf('%s%s%s', $projectDir, Path::FOLDER_UPLOADS_TEST->value, '/products');
 
         if ($filesystem->exists($uploadDir)) {
             $files = glob($uploadDir.'/*');
