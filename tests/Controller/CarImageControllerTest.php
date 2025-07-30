@@ -27,7 +27,7 @@ class CarImageControllerTest extends WebTestCase
             'imageFile' => $imageManager->createTemporyAndUploadedFile($path),
         ]);
 
-        $client->request('GET', sprintf('/car-image/download/%s', $carImage->getId()));
+        $client->request('GET', sprintf('/car-image/download/%d', $carImage->getId()));
 
         self::assertResponseStatusCodeSame(200);
     }
@@ -44,7 +44,7 @@ class CarImageControllerTest extends WebTestCase
 
         $client->request(
             'POST',
-            sprintf('/car-image/process/car/%s', $car->getId()),
+            sprintf('/car-image/process/car/%d', $car->getId()),
             [],
             [
                 'car' => [
@@ -83,7 +83,7 @@ class CarImageControllerTest extends WebTestCase
 
         $carImage = CarImageFactory::createOne();
 
-        $client->request('DELETE', sprintf('/car-image/%s/remove', $carImage->getId()));
+        $client->request('DELETE', sprintf('/car-image/%d/remove', $carImage->getId()));
 
         CarImageFactory::assert()->notExists(['id' => $carImage->getId()]);
     }

@@ -83,7 +83,7 @@ class ProductTest extends WebTestCase
             'images' => [ProductImageFactory::createOne(['imageFile' => new File($filePath)])],
         ]);
 
-        $client->request('GET', sprintf('/product/%s/edit', $product->getId()));
+        $client->request('GET', sprintf('/product/%d/edit', $product->getId()));
 
         self::assertResponseStatusCodeSame(200);
 
@@ -103,7 +103,7 @@ class ProductTest extends WebTestCase
 
         $product = ProductFactory::createOne();
 
-        $client->request('GET', sprintf('/product/%s/edit', $product->getId()));
+        $client->request('GET', sprintf('/product/%d/edit', $product->getId()));
         $client->submitForm('delete');
 
         self::assertResponseRedirects('/product', 303);
@@ -127,7 +127,7 @@ class ProductTest extends WebTestCase
             'images' => [$image2],
         ]);
 
-        $client->request('GET', sprintf('/product/download-image/%s', $image2->getId()));
+        $client->request('GET', sprintf('/product/download-image/%d', $image2->getId()));
 
         self::assertResponseStatusCodeSame(200);
     }

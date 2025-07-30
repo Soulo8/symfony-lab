@@ -48,7 +48,7 @@ class CarControllerTest extends WebTestCase
 
         $car = CarFactory::createOne();
 
-        $client->request('GET', sprintf('/car/%s/edit', $car->getId()));
+        $client->request('GET', sprintf('/car/%d/edit', $car->getId()));
 
         $client->submitForm('save', [
             'car[name]' => 'Something New',
@@ -65,7 +65,7 @@ class CarControllerTest extends WebTestCase
 
         $car = CarFactory::createOne();
 
-        $client->request('GET', sprintf('/car/%s/edit', $car->getId()));
+        $client->request('GET', sprintf('/car/%d/edit', $car->getId()));
         $client->submitForm('delete');
 
         self::assertResponseRedirects('/car', 303);
