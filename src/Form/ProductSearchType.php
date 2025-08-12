@@ -18,6 +18,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<ProductSearch>
+ */
 final class ProductSearchType extends AbstractType
 {
     public function __construct(
@@ -108,6 +111,11 @@ final class ProductSearchType extends AbstractType
         ]);
     }
 
+    /**
+     * @param FormInterface<ProductSearch> $form
+     *
+     * @return FormInterface<ProductSearch>
+     */
     private function addSubTagWithoutChoice(FormInterface $form): FormInterface
     {
         $form->add('subTag', EntityType::class, [
