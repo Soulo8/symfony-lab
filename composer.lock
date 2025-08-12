@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd950e34a92e8fad4311578112f71733",
+    "content-hash": "70f7b0549c5e3cdc7ac37fcb1bdb4664",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -10089,16 +10089,16 @@
         },
         {
             "name": "symfonycasts/tailwind-bundle",
-            "version": "v0.10.1",
+            "version": "v0.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/tailwind-bundle.git",
-                "reference": "bd701c309250977ce6163ecb54ee74dd63680790"
+                "reference": "72590eec2aa532a73ce9394c6d3717fe3efd88f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/tailwind-bundle/zipball/bd701c309250977ce6163ecb54ee74dd63680790",
-                "reference": "bd701c309250977ce6163ecb54ee74dd63680790",
+                "url": "https://api.github.com/repos/SymfonyCasts/tailwind-bundle/zipball/72590eec2aa532a73ce9394c6d3717fe3efd88f5",
+                "reference": "72590eec2aa532a73ce9394c6d3717fe3efd88f5",
                 "shasum": ""
             },
             "require": {
@@ -10139,9 +10139,9 @@
             ],
             "support": {
                 "issues": "https://github.com/SymfonyCasts/tailwind-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/tailwind-bundle/tree/v0.10.1"
+                "source": "https://github.com/SymfonyCasts/tailwind-bundle/tree/v0.11.1"
             },
-            "time": "2025-07-14T17:36:36+00:00"
+            "time": "2025-07-29T16:22:45+00:00"
         },
         {
             "name": "tales-from-a-dev/flowbite-bundle",
