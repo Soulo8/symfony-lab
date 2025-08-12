@@ -12,6 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\UX\Autocomplete\Form\AsEntityAutocompleteField;
 use Symfony\UX\Autocomplete\Form\BaseEntityAutocompleteType;
 
+/**
+ * @extends AbstractType<Tag>
+ */
 #[AsEntityAutocompleteField]
 final class TagAutocompleteField extends AbstractType
 {

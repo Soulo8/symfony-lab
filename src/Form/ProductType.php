@@ -16,6 +16,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
+/**
+ * @extends AbstractType<Product>
+ */
 final class ProductType extends AbstractType
 {
     public function __construct(
